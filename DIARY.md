@@ -14,14 +14,26 @@
 ## Date: 4th October 2024
 
 ### Summary
-- I loooked into research papers on machine learning algorithms and churn prediction to gain a wider understanding and understand on how to approach my fyp.
+- I looked into research papers on machine learning algorithms and churn prediction to gain a wider understanding and understand on how to approach my fyp.
 
 - Initial idea i have is to have multiple different ml models to be used to predict churn such as decision tree, Logistic regression , support vector machines. Then to evaluate them empirically and give some findings on each model.
-
 
 ### Next Steps
 - Contiune researching and writing up project plan
 - Discuss project plan and my churning sup problem with supervisor before project plan deadline.
+
+
+## Date: 8/10/24
+
+### Summary
+- Completed first draft of project plan. Also created a set of question to be asked for superivors meeting 
+
+## Date: 10/10/24
+
+### Summary
+- I met with my supervisor, discussed project plan and got somefeedback on my questions .Went onto to finalise project 
+plan and sumbit it.
+
 
 
 
