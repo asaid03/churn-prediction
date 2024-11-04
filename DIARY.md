@@ -57,6 +57,26 @@ Today, I continued Exploration Data analysis on the Telecom dataset. I utilised 
 However, given that the dataset contains quite a lot of missing data values, I'm planning on changing datasets and researching alternative datasets that might offer more complete information. It would mean I would have to redo EDA, but it should be easier now.
 
 
+## Date: 22/10/24
+
+### Summary
+I have selected a new dataset by the company IBM that can be downloaded from Kaggle. The dataset is a telecom dataset, and I have started EDA again. It was much easier this time as I had good practice with the previous dataset. The dataset did not have much missing data, and we dealt with it by deleting those rows. I had the choice of using the median values of the row to replace the missing data but opted to delete those rows as it was a deficient number(11 rows). I ran into some issues with the types of some of the dataset as some where object when it should have been float. Made me realise how important EDA is as it prevents errors later on when building Ml models.
+
+
+## Date: 26/10/24 - 30/10/24
+
+### Summary
+Over these last few days, I decided to get my EDA completed, since the goal is to move on to actually implement ML algorithms that predict churn. First, I started investigating which customer attributes might have decent or strong correlation to churn. For each attribute, visual diagrams were created, such as boxplots and histograms, in order to discover some underlying relations between attributes. 
+
+I also did deep analysis with Demographics and Payment Types. From the customers, whether **SeniorCitizen** and **Partner**, based on these two statuses, I found some trends in the Churn behavior. Then, I moved my attention to features regarding service. I analyzed features like **Online Security, Tech Support, Phone Service, and Multiple Lines** to determine whether the kind of services provided had some impact on the churning rate. This helped me highlight customers who could be in danger of churning because of a lack of additional services. I also explored **Internet Service types** and **Payment Methods** to see if there are any service types or payment preferences that could be related to churning. Observation The customers using an electronic check as a payment method showed higher churn. It appears there is some relationship to the billing types and customer satisfaction. 
+
+
+Having completed the EDA, it gave insight into the structure of the data and relationships that existed. That allowed me to get an idea of what features may play an important role in predicting churn. That would help me with the next part of my development, building ML models and feature engineering. 
+
+
+
+
+
 
 
 
