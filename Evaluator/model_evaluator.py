@@ -1,5 +1,9 @@
 
+import pickle
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+
 
 class ModelEvaluator:
     def __init__(self):
@@ -160,3 +164,36 @@ class ModelEvaluator:
             "f1_score": ModelEvaluator.f1_score(y_true, y_pred),
             "f2_score": ModelEvaluator.f2_score(y_true, y_pred),
         }
+        
+    @staticmethod
+    def compare_and_visualise_metrics(file_paths, labels):
+        """
+        Compares and visualises evaluation metrics stored in the checkpoint files using Pandas.
+
+        Parameters:
+            file_paths (list of str): Paths to the pickle files containing metrics.
+            labels (list of str): Labels for the scaling techniques/models being compared.
+        """
+        if len(file_paths) != len(labels):
+            raise ValueError("The number of file paths and labels must match.")
+
+        # Load metrics 
+        metrics_data = {}
+        for file_path, label in zip(file_paths, labels):
+            with open(file_path, 'rb') as f:
+                metrics_data[label] = pickle.load(f)
+
+        # Convert metrics_data to a DataFrame
+        metrics_df = pd.DataFrame(metrics_data)
+        metrics_df.index.name = "Metric"
+
+        #plotting
+        metrics_df.plot(kind="bar", figsize=(10, 6))
+        plt.title("Comparison of Evaluation Metrics")
+        plt.ylabel("Scores")
+        plt.xlabel("Metrics")
+        plt.xticks(rotation=0)
+        plt.legend(title="Scaling Techniques")
+        plt.tight_layout()
+        plt.show()
+
