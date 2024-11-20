@@ -166,13 +166,14 @@ class ModelEvaluator:
         }
         
     @staticmethod
-    def compare_and_visualise_metrics(file_paths, labels):
+    def compare_and_visualise_metrics(file_paths, labels, title = None ):
         """
         Compares and visualises evaluation metrics stored in the checkpoint files using Pandas.
 
         Parameters:
             file_paths (list of str): Paths to the pickle files containing metrics.
             labels (list of str): Labels for the scaling techniques/models being compared.
+            title (str): The title of the chart.
         """
         if len(file_paths) != len(labels):
             raise ValueError("The number of file paths and labels must match.")
@@ -193,7 +194,6 @@ class ModelEvaluator:
         plt.ylabel("Scores")
         plt.xlabel("Metrics")
         plt.xticks(rotation=0)
-        plt.legend(title="Scaling Techniques")
         plt.tight_layout()
         plt.show()
 
