@@ -90,53 +90,73 @@ class ModelEvaluator:
 
 
 
-@staticmethod
-def f1_score(y_true, y_pred):
-    """
-    Calculate the F1-score of predictions.
+    @staticmethod
+    def f1_score(y_true, y_pred):
+        """
+        Calculate the F1-score of predictions.
 
-    Parameters:
-    - y_true (np-array): The true labels.
-    - y_pred (np-array): The predicted labels.
+        Parameters:
+        - y_true (np-array): The true labels.
+        - y_pred (np-array): The predicted labels.
 
-    Returns:
-    - float: Returns the F1-score  or 0 if both precision and recall are 0.
-    """
-    # Calculate precision and recall using my existing methods
-    precision = ModelEvaluator.precision_score(y_true, y_pred)
-    recall = ModelEvaluator.recall_score(y_true, y_pred)
-    
-    # Avoid division by zero
-    if precision == 0 and recall == 0:
-        return 0
-    
-    # F1-score formula
-    f1 = 2 * (precision * recall) / (precision + recall)
-    return f1
-
-
-@staticmethod
-def f2_score(y_true, y_pred):
-    """
-    Calculate the F2-score of predictions, focuses recall over precision as false negatives are more important in churn prediction.
-
-    Parameters:
-    - y_true (np-array): The true labels.
-    - y_pred (np-array): The predicted labels.
-
-    Returns:
-    - float: Returns the F2-score or 0 if both precision and recall are 0.
-    """
-    # Calculate precision and recall using my existing methods
-    precision = ModelEvaluator.precision_score(y_true, y_pred)
-    recall = ModelEvaluator.recall_score(y_true, y_pred)
-    
-    # Avoid division by zero
-    if precision == 0 and recall == 0:
-        return 0
-    
-    # F2-score formula
-    f2 = (1 + 2**2) * (precision * recall) / ((2**2 * precision) + recall)
-    return f2
+        Returns:
+        - float: Returns the F1-score  or 0 if both precision and recall are 0.
+        """
+        # Calculate precision and recall using my existing methods
+        precision = ModelEvaluator.precision_score(y_true, y_pred)
+        recall = ModelEvaluator.recall_score(y_true, y_pred)
+        
+        # Avoid division by zero
+        if precision == 0 and recall == 0:
+            return 0
+        
+        # F1-score formula
+        f1 = 2 * (precision * recall) / (precision + recall)
+        return f1
 
 
+    @staticmethod
+    def f2_score(y_true, y_pred):
+        """
+        Calculate the F2-score of predictions, focuses recall over precision as false negatives are more important in churn prediction.
+
+        Parameters:
+        - y_true (np-array): The true labels.
+        - y_pred (np-array): The predicted labels.
+
+        Returns:
+        - float: Returns the F2-score or 0 if both precision and recall are 0.
+        """
+        # Calculate precision and recall using my existing methods
+        precision = ModelEvaluator.precision_score(y_true, y_pred)
+        recall = ModelEvaluator.recall_score(y_true, y_pred)
+        
+        # Avoid division by zero
+        if precision == 0 and recall == 0:
+            return 0
+        
+        # F2-score formula
+        f2 = (1 + 2**2) * (precision * recall) / ((2**2 * precision) + recall)
+        return f2
+
+
+
+    @staticmethod
+    def calculate_metrics(y_true, y_pred):
+        """
+        Calculates evaluation metrics using ModelEvaluator methods.
+
+        Parameters:
+        - y_true: The true labels.
+        - y_pred: The Predicted labels.
+
+        Returns:
+        - dict: A dictionary of evaluation metrics.
+        """
+        return {
+            "accuracy": ModelEvaluator.accuracy_score(y_true, y_pred),
+            "precision": ModelEvaluator.precision_score(y_true, y_pred),
+            "recall": ModelEvaluator.recall_score(y_true, y_pred),
+            "f1_score": ModelEvaluator.f1_score(y_true, y_pred),
+            "f2_score": ModelEvaluator.f2_score(y_true, y_pred),
+        }
