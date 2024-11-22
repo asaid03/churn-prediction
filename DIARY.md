@@ -74,6 +74,37 @@ I also did deep analysis with Demographics and Payment Types. From the customers
 Having completed the EDA, it gave insight into the structure of the data and relationships that existed. That allowed me to get an idea of what features may play an important role in predicting churn. That would help me with the next part of my development, building ML models and feature engineering. 
 
 
+## Date: 10/11/24
+
+### Summary
+I have been preoccupied the last few days with assignments and didn't get to do as much work as I liked on my final year project, and now I need to catch up on my timeline. Today, I began my data preprocessing stage. I realised a mistake in my Explorative Data Analysis, where I deleted 11 rows of data because the total charge was missing. While this is partially correct, each data object has valuable information that can aid churn prediction modelling. To combat this, I utilised how long each customer stayed with the company and their monthly charge to manually compute the total charge.
+
+After this, I decided to investigate how to convert the data for ML mothe del best as some of the data was non-numerical, such as payment methods. This is where I then learnt about encoding data and the various types of encodings. Given my dataset, I utilised binary encoding for binary variables (e.g., Yes/No or Male/Female categories) and one-hot encoding for categorical variables with multiple unique values (such as PaymentMethod or InternetService). Overall today i have set a solid foundation for model training and will be moving on to normalisation/scaling next which is key for my first ML algo KNN.
+
+
+## Date: 11/11/24
+
+### Summary
+Today, I completed my data preprocessing process. I did this by normalising the data and creating 2 different normalised versions of the dataset. One is the min_max normalised date, while the other is the z_score dataset. I did this to test which normalised dataset performs better with my KNN model. After this, I began developing the KNN model from scratch, utilising no libraries and using Euclidean distance as the distance metric. My initial implementation was working very slowly. This was mainly due to how I was sorting computing distances utilising insertion sort, which has a time complexity of O(n^2), which could be better given that my dataset was 7000+.
+
+After some research, I learnt about heapq, which has a time complexity of O(logn). This reduced my computation time from 20 minutes to about 1-2 minutes, which is a huge accomplishment. I also learnt how important optimisation is with ML models.
+
+## Date: 12/11/24 - 15/11/24
+
+### Summary
+I began actually testing out the KNN models I created on my dataset. Initially, I ran my KNN with k set to 1 neighbour and tested it on both min_max and z_score normalised churn datasets. The results were relatively okay, with an error rate of about 0.23, which is understandable since KNN is a lazy algorithm. I then ran my algorithms on larger numbers of K to find the optimal k and plotted a bar chart of error results.
+
+<img src="Documents\Images\fidning_opt_k_knn_results.png" alt="Bar chart of KNN error rates for different values of K" width="40%" /> here the optimal k value is 34 due to having lowest error rate.
+
+However i had some slight issues of rerunning models each time i open up my notebook which would be timeconsuming. I began investigating ways to save models suc that i would not require retraining each time. This is where i found pickle,a Python library that allows saving and reloading objects such as models or evaluation metrics.This allowed me to foucs on  interpreting the results and visualising the error rates without redundant computations especially when testing different configurations or normalisation methods. Overall my workflow has become more optimised compared to before.
+
+
+
+
+
+
+
+
 
 
 
