@@ -3,7 +3,6 @@ import heapq
 import math
 import numpy as np
 
-
 class NearestNeighbours:
     
     def __init__(self,neighbours=1):
@@ -14,8 +13,7 @@ class NearestNeighbours:
             self.n_neighbours = neighbours
         self.tie_count = 0  # Initialising the tie counter
         
-    
-            
+         
     
     def get_Num_Neighbours(self):
         return self.n_neighbours
@@ -87,10 +85,8 @@ class NearestNeighbours:
     def print_tie_count(self):
         print(f"Number of ties encountered: {self.tie_count}")
         
-        
-       
+
 class Conformal(NearestNeighbours):
-    
     
     def __init__(self,):
         super().__init__(neighbours=1)
@@ -121,7 +117,6 @@ class Conformal(NearestNeighbours):
             return near_diff_distance / near_same_distance
 
 
-
     def find_minimum(self, distances):
         if not distances:
             return None  
@@ -130,7 +125,6 @@ class Conformal(NearestNeighbours):
             if dist < minimum:
                 minimum = dist
         return minimum
-
 
     def cs_train_set(self):
         cs = []
@@ -164,8 +158,7 @@ class Conformal(NearestNeighbours):
 
         return cs
 
-           
-           
+                   
            
     def cs_test_sample(self, sample): # reduce computation by only computing c.s for sample if there is change in distance of nearest difference class and nearest same class
         test_sample = sample[:-1]
@@ -194,8 +187,7 @@ class Conformal(NearestNeighbours):
                 if(dist <= min_same_distance):
                     train_set_conformity_scores[i][3] = dist
                     changed = True
-                    
-                
+                         
             else:
                 if (dist <= near_diff_distance):
                     near_diff_distance = dist
@@ -226,10 +218,7 @@ class Conformal(NearestNeighbours):
             cs = np.array(extracted_data,dtype=object)
 
         return cs
-
-    
-
-
+ 
 
     def pvalue(self, test_sample, cs_list): 
         sorted_indices = np.argsort(cs_list[:, 0])
@@ -241,8 +230,6 @@ class Conformal(NearestNeighbours):
                 break
         p_value = rank / len(sorted_cs_list)
         
-
-        
         return p_value
 
     def get_true_label(self,test_sample):
@@ -252,7 +239,6 @@ class Conformal(NearestNeighbours):
             
         return self.y_test[i]
         
-    
     def avg_false_pval_1sample(self,test_sample): # returns avg false p value for only 1 test sample
         possible_labels = self.pos_labels.copy()
         true_label = self.get_true_label(test_sample)
@@ -288,3 +274,6 @@ class Conformal(NearestNeighbours):
         avg_f_pval = sum/len(avg_false_pval)
         
         return avg_f_pval
+
+        
+    
