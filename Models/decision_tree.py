@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from collections import Counter
+import pickle
+import os
 
 class Node:
     def __init__(self, feature=None, threshold=None, left=None, right=None, *, value=None):
@@ -30,18 +32,37 @@ class DecisionTree:
         self.min_samples_split = min_samples_split
         self.n_features = n_features
         self.root = None
+        
+        valid_uniformity_measures = {"gini", "entropy", "error"}
+        if self.uniformity_measure not in valid_uniformity_measures:
+            raise ValueError(f"Invalid uniformity_measure {self.uniformity_measure}. Choose from {valid_uniformity_measures}.")
+        
+        # Validate max_depth
+        if not isinstance(max_depth, int) or max_depth <= 0:
+            raise ValueError("max_depth must be a positive integer.")
 
+        # Validate min_samples_split
+        if not isinstance(min_samples_split, int) or min_samples_split < 2:
+            raise ValueError("min_samples_split must be an integer >= 2.")
+
+        # Validate n_features
+        if n_features is not None:
+            if not isinstance(n_features, int) or n_features <= 0:
+                raise ValueError("n_features must be a positive integer or None.")
+        
+        
+        
     def fit(self, X, y):
 
         # decide number of features for  splitting
         if not self.n_features:
             # if not specified use all freatures available
-            self.n_features = X.shape[1]
+            current_n_features = X.shape[1]
         else:
             # case for n_features  being smaller then actual size of features.
-            self.n_features = min(X.shape[1], self.n_features)
+            current_n_features = min(X.shape[1], current_n_features)
 
-        self.root = self.grow_tree(X, y)
+        self.root = self.grow_tree(X, y,current_n_features)
 
     def predict(self, X):
         """
@@ -49,7 +70,7 @@ class DecisionTree:
         """
         return np.array([self.traverse_tree(x, self.root) for x in X])
 
-    def grow_tree(self, X, y, depth=0):
+    def grow_tree(self, X, y,current_n_features, depth=0):
         """
         Recursively build the decision tree.
         """
@@ -62,7 +83,7 @@ class DecisionTree:
             return Node(value=leaf_value)
 
         # Select features to consider
-        feat_idxs = np.random.choice(n_feats, self.n_features, replace=False)
+        feat_idxs = np.random.choice(n_feats,current_n_features, replace=False)
 
         # Find the best split
         best_feature, best_threshold = self.best_split(X, y, feat_idxs)
@@ -74,8 +95,8 @@ class DecisionTree:
             leaf_value = self.most_common_label(y)
             return Node(value=leaf_value)
 
-        left_child = self.grow_tree(X[left_idxs, :], y[left_idxs], depth + 1)
-        right_child = self.grow_tree(X[right_idxs, :], y[right_idxs], depth + 1)
+        left_child = self.grow_tree(X[left_idxs, :], y[left_idxs],current_n_features, depth + 1)
+        right_child = self.grow_tree(X[right_idxs, :], y[right_idxs],current_n_features, depth + 1)
         return Node(feature=best_feature, threshold=best_threshold, left=left_child, right=right_child)
 
     def best_split(self, X, y, feat_idxs):
@@ -143,8 +164,6 @@ class DecisionTree:
             return -np.sum([p * np.log2(p) for p in proportions if p > 0])
         elif self.uniformity_measure == "error":
             return 1 - np.max(proportions)
-        else:
-            raise ValueError(f"Invalid uniformity_measure '{self.uniformity_measure}'. Choose 'gini', 'entropy', or 'error'.")
         
 
     def most_common_label(self, y):
@@ -161,6 +180,29 @@ class DecisionTree:
             return self.traverse_tree(x, node.left)
         return self.traverse_tree(x, node.right)
 
+
+    def save(self, filename):
+        os.makedirs("checkpoints", exist_ok=True)
+        file_path = os.path.join("checkpoints", filename)
+        
+        # Save the model
+        with open(file_path, 'wb') as f:
+            pickle.dump(self, f)
+        print(f"Model saved to {file_path}")
+
+    @staticmethod
+    def load(filename):
+        # Construct the full file path
+        file_path = os.path.join("checkpoints", filename)
+
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+        
+        # Load the model
+        with open(file_path, 'rb') as f:
+            model = pickle.load(f)
+        print(f"Model loaded from {file_path}")
+        return model
 
 
 
