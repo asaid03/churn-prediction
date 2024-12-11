@@ -6,7 +6,17 @@ import os
 
 class Node:
     def __init__(self, feature=None, threshold=None, left=None, right=None, *, value=None):
+        
+        """
+        Initialises a node in the decision tree.
 
+        Parameters:
+        - feature: Index of the feature used for splitting.
+        - threshold: Threshold value for the split.
+        - left: Left child node.
+        - right: Right child node.
+        - value: Class label if the node is a leaf.
+        """
         self.feature = feature
         self.threshold = threshold
         self.left = left
@@ -23,7 +33,8 @@ class DecisionTree:
         Decision Tree Classifier supporting Gini, Entropy, and Classification Error.
 
         Parameters:
-        - uniformity_measure: Splitting uniformity_measure 
+        - uniformity_measure: ('gini', 'entropy', 'error')
+        - max_depth: Maximum depth of the tree.
         - min_samples_split: Minimum number of samples required to split a node.
         - n_features: Number of features to consider for splits (uses all if None).
         """
@@ -53,6 +64,13 @@ class DecisionTree:
         
         
     def fit(self, X, y):
+        """
+        Build the decision tree classifier from the training set (X, y).
+
+        Parameters:
+        - X: Feature
+        - y: Label 
+        """
 
         # decide number of features for  splitting
         if not self.n_features:
@@ -172,7 +190,6 @@ class DecisionTree:
     
 
     def traverse_tree(self, x, node):
-
         if node.is_leaf_node():
             return node.value
 
@@ -182,6 +199,12 @@ class DecisionTree:
 
 
     def save(self, filename):
+        """
+        Save the trained model to a file.
+
+        Parameters:
+        - filename: Name of the file to save the model.
+        """
         os.makedirs("checkpoints", exist_ok=True)
         file_path = os.path.join("checkpoints", filename)
         
@@ -192,6 +215,15 @@ class DecisionTree:
 
     @staticmethod
     def load(filename):
+        """
+        Load a trained model from a file.
+
+        Parameters:
+        - filename: Name of the file containing the saved model.
+
+        Returns:
+        - model: The loaded DecisionTree model.
+        """
         # Construct the full file path
         file_path = os.path.join("checkpoints", filename)
 
