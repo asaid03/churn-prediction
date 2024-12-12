@@ -177,7 +177,6 @@ class DecisionTree:
         """
         proportions = np.bincount(y) / len(y) # p(X)
 
-
         if self.uniformity_measure == "gini":
             return 1 - np.sum(proportions ** 2)
         elif self.uniformity_measure == "entropy":
