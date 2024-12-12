@@ -49,8 +49,9 @@ class DecisionTree:
             raise ValueError(f"Invalid uniformity_measure {self.uniformity_measure}. Choose from {valid_uniformity_measures}.")
         
         # Validate max_depth
-        if not isinstance(max_depth, int) or max_depth <= 0:
-            raise ValueError("max_depth must be a positive integer.")
+        if max_depth is not None and (not isinstance(max_depth, int) or max_depth <= 0):
+            raise ValueError("max_depth must be a positive integer or None.")
+
 
         # Validate min_samples_split
         if not isinstance(min_samples_split, int) or min_samples_split < 2:
@@ -95,8 +96,9 @@ class DecisionTree:
         n_samples, n_feats = X.shape
         n_labels = len(np.unique(y))
 
-        # Check stopping criteria
-        if depth >= self.max_depth or n_labels == 1 or n_samples < self.min_samples_split:
+        if ((self.max_depth is not None and depth >= self.max_depth)
+            or n_labels == 1
+            or n_samples < self.min_samples_split):
             leaf_value = self.most_common_label(y)
             return Node(value=leaf_value)
 

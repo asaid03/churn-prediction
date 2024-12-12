@@ -32,10 +32,10 @@ class NearestNeighbours:
         k = min(self.n_neighbours, len(self.X_train))
 
         # Calculate all distances without sorting
-        distances = [
-            (self.euclidean_distance(train_sample, test_sample), label)
-            for train_sample, label in zip(self.X_train, self.y_train)
-        ]
+        distances = []
+        for train_sample, label in zip(self.X_train, self.y_train):
+            distance = self.euclidean_distance(train_sample, test_sample)
+            distances.append((distance, label))
 
         # Use heapq to get the k smallest distances directly
         k_nearest_neighbours = heapq.nsmallest(k, distances, key=lambda x: x[0])
