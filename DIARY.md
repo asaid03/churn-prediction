@@ -100,6 +100,16 @@ However i had some slight issues of rerunning models each time i open up my note
 
 
 
+## Date: 18/11/24
+
+### Summary
+After this, I, then decided to implement a known conformal predictor. This allowed me to quantify uncertainty and assign confidence levels to predictions. However my implementation could be more efficent as it takes a long time to run on a large datatset so I have decided to test on the subset of the dataset(3500). This required me to go through Vladimir Vovk's research work on conformal predictors, which was fairly interesting. 
+
+My implementation was a bit crude and could be improved with some optimisation as the run time was very long, and this could be due to repetitive copying of conformity score. However, I did improve its optimality by only recomputing conformity score when necessary, thus reducing run time greatly from previous runs.
+
+## Date: 20/11/24
+After some research on evaluation metrics for classification, I have realised that the current metrics I'm using, accuracy and error rate, are very weak. 
+So, I have decided to use the metrics F1-score, accuracy, recall, precision, and F2-score. I created these from scratch, utilising the knowledge gained. This would help a lot since my dataset is imbalanced and give further insights, such as the number of false negatives and false positives. Utilising my new metrics class, I then updated my main Jupyter notebook to have much more in-depth results and added graphs. Overall, I am making some progress, but I should investigate/research more before coding or developing so that I wouldn't have to refactor too much.
 
 
 
