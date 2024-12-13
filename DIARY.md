@@ -4,7 +4,7 @@
 
 ### Summary
 - Today, I concentrated on determining the specific sub-problem I will focus on for comparing ML algorithms. After some consideration, I decided to pursue **churn prediction**. 
-- I also began evaluating wich datasets i would be using in this project. In contention between Telecom's data set and Bank dataset.
+- I also began evaluating which datasets i would be using in this project. In contention between Telecom's data set and Bank dataset.
 
 ### Next Steps
 - Contiune researching and start writing up a project plan
@@ -19,20 +19,19 @@
 - Initial idea i have is to have multiple different ml models to be used to predict churn such as decision tree, Logistic regression , support vector machines. Then to evaluate them empirically and give some findings on each model.
 
 ### Next Steps
-- Contiune researching and writing up project plan
+- Continue researching and writing up project plan
 - Discuss project plan and my churning sup problem with supervisor before project plan deadline.
 
 
 ## Date: 8/10/24
 
 ### Summary
-- Completed first draft of project plan. Also created a set of question to be asked for superivors meeting 
+- Completed the first draft of the project plan. I also created a set of question to be asked for supervisors meeting
 
 ## Date: 10/10/24
 
 ### Summary
-- I met with my supervisor, discussed project plan and got somefeedback on my questions .Went onto to finalise project 
-plan and sumbit it.
+- I met with my supervisor, discussed the project plan, and got feedback on my questions. I then went on to finalise the project plan and submit it.
 
 
 ## Date: 14/10/24
@@ -97,6 +96,47 @@ I began actually testing out the KNN models I created on my dataset. Initially, 
 <img src="Documents\Images\fidning_opt_k_knn_results.png" alt="Bar chart of KNN error rates for different values of K" width="40%" /> here the optimal k value is 34 due to having lowest error rate.
 
 However i had some slight issues of rerunning models each time i open up my notebook which would be timeconsuming. I began investigating ways to save models suc that i would not require retraining each time. This is where i found pickle,a Python library that allows saving and reloading objects such as models or evaluation metrics.This allowed me to foucs on  interpreting the results and visualising the error rates without redundant computations especially when testing different configurations or normalisation methods. Overall my workflow has become more optimised compared to before.
+
+
+
+## Date: 18/11/24
+
+### Summary
+After this, I, then decided to implement a known conformal predictor. This allowed me to quantify uncertainty and assign confidence levels to predictions. However my implementation could be more efficent as it takes a long time to run on a large datatset so I have decided to test on the subset of the dataset(3500). This required me to go through Vladimir Vovk's research work on conformal predictors, which was fairly interesting. 
+
+My implementation was a bit crude and could be improved with some optimisation as the run time was very long, and this could be due to repetitive copying of conformity score. However, I did improve its optimality by only recomputing conformity score when necessary, thus reducing run time greatly from previous runs.
+
+## Date: 20/11/24
+After some research on evaluation metrics for classification, I have realised that the current metrics I'm using, accuracy and error rate, are very weak. 
+So, I have decided to use the metrics F1-score, accuracy, recall, precision, and F2-score. I created these from scratch, utilising the knowledge gained. This would help a lot since my dataset is imbalanced and give further insights, such as the number of false negatives and false positives. Utilising my new metrics class, I then updated my main Jupyter notebook to have much more in-depth results and added graphs. Overall, I am making some progress, but I should investigate/research more before coding or developing so that I wouldn't have to refactor too much.
+
+
+## Date 22/11/24
+
+I have researched more about software engineer mehtodologies in ML and based on that I have decided to implment unit test cases for classes which is what I have done. These test classes where added for conformal and KNN classes and are fully working.
+
+My knn is model is fully complete now and have merged into main branch with no issues.
+
+
+## Date 26/11/24
+I have been watching videos and looking into papers about decision tree models in the recent days. I specifally focused on different uniformity measures, utilising this knowledge I then implemented a decsion tree class, haven't fully tested it on my data but will do that soon. I intialy started with a basic Decision tree class but realised to accomodate for different uniformity measures I would have to split into 2 classes and adjust the paramters
+Looking at my original plan I have overestimated the amount of work I could do, this mainly due to workload of other modules. I am a bit behind but not so much
+
+I have also booked a meeting with my supervisor again tomorrow and this is mainly to establish if im ontrack and to answer any questions I have.
+
+## Date 27/11/24
+Today I attended my meeting with my supervisor and I have completed a good amount of work for interim submission. I also managed to discuss what should be in the report and how I could go about presenting my fyp later on. 
+
+Furthermore, I have carried out inital testing for my Decision tree class and is preforming relatively well, some higher scores compared to knn.
+
+## Date 05/12/24 - 09/2/24
+
+I have been really sick these past couple of days. It is a shame, considering I wanted to improve the validity of my models by adding cross-validation and perhaps adding decision boundary results for my different models. This has set me back as now I need to complete my report writing; this also meant I don't think I would be able to do my SVN model or basic GUI. However, on the bright side, I have identified and fixed a key issue; this was the fact that I was normalising the whole dataset and then splitting the churn dataset for testing and training. This had led to data leakage, which affected the validity of my results. I fixed this issue by splitting and then normalising my dataset.This has led to slightly lower results in my decision tree but hasn't affected my KNN model results.
+
+Furthermore, in this timeperiod I have finished my testing of decision tree model and am currently writing up my report/presentation.
+
+
+
 
 
 
