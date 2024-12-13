@@ -23,9 +23,9 @@ Running them is not necessary unless you want to retrain models or reproduce res
 If needed, run all the cells in chronological order to avoid errors.
 
 To run the unit tests make sure you are in the general directory of the project and use these commands in the CLI:
-python -m unittest  .\tests\test_knn.py
-python -m unittest  .\tests\test_decision_tree.py
-python -m unittest  .\tests\test_model_evaluator.py
+- python -m unittest  .\tests\test_knn.py
+- python -m unittest  .\tests\test_decision_tree.py
+- python -m unittest  .\tests\test_model_evaluator.py
 
 
 
