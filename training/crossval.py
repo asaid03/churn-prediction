@@ -20,18 +20,43 @@ class CrossValidator:
         fold_size = len(X_train) // folds
         model_performance = []
 
-        for i in range(folds):
-            # Split sample_indexes
-            val_start = i * fold_size
-            val_end = (i + 1) * fold_size
-            val_idx = sample_indexes[val_start:val_end]
-            train_idx = np.concatenate([sample_indexes[:val_start], sample_indexes[val_end:]])
+        for fold in range(folds):
+            # validation set indexes
+            validation_start = fold * fold_size
+            validation_end = (fold + 1) * fold_size if fold < folds - 1 else len(X_train)
 
-            # Split data
-            X_fold_train, y_fold_train = X_train[train_idx], y_train[train_idx]
-            X_fold_val, y_fold_val = X_train[val_idx], y_train[val_idx]
+            validation_indexes = sample_indexes[validation_start:validation_end] # range of indexes for validation set from sample_indexes to be used for validation set
+            # training set indexes
+            training_indexes_start = sample_indexes[:validation_start]
+            training_indexes_end = sample_indexes[validation_end:]
+            training_indexes = np.concatenate([training_indexes_start, training_indexes_end])
 
-            # Clone and train model
-            fold_model = model.clone() 
+            # Split training and validation sets
+            X_fold_train, y_fold_train = X_train[training_indexes], y_train[training_indexes]
+            X_fold_validation, y_fold_validation = X_train[validation_indexes], y_train[validation_indexes]
+
+            # Clone model for each fold
+            fold_model = model.clone()
             fold_model.fit(X_fold_train, y_fold_train)
+
+            # Predict/evaluate
+            y_pred = fold_model.predict(X_fold_validation)
+            model_performance.append(ModelEvaluator.calculate_metrics(y_fold_validation, y_pred))
+
+        # metrics for each fold
+        mean_metrics = {}
+        std_metrics = {}
+
+        for metric in model_performance[0]:
+            metric_values = [fold_metrics[metric] for fold_metrics in model_performance]
+            mean_metrics[metric] = np.mean(metric_values)
+            std_metrics[metric] = np.std(metric_values)
+
+        return {
+            'mean_metrics': mean_metrics,
+            'std_metrics': std_metrics,
+            'fold_metrics': model_performance
+        }
+
+
 
