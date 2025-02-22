@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from Models.decision_tree import Node,DecisionTree 
+from models.decision_tree import Node,DecisionTree 
 
 class TestDecisionTree(unittest.TestCase):
     def setUp(self):
