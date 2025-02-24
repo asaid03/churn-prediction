@@ -22,8 +22,8 @@ class CrossValidator:
 
         for fold in range(folds):
             # validation set indexes
-            validation_start = fold * fold_size
-            validation_end = (fold + 1) * fold_size if fold < folds - 1 else len(X_train)
+            validation_start = fold * fold_size 
+            validation_end = (fold + 1) * fold_size if fold < folds - 1 else len(X_train) # last fold gets remaining samples
 
             validation_indexes = sample_indexes[validation_start:validation_end] # range of indexes for validation set from sample_indexes to be used for validation set
             # training set indexes
