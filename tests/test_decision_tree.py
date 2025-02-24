@@ -38,6 +38,14 @@ class TestDecisionTree(unittest.TestCase):
     def test_most_common_label(self):
         y = np.array([1, 0, 1, 1, 0])
         self.assertEqual(self.tree.most_common_label(y), 1)
+            
+    def test_clone(self):
+        tree = self.tree.clone()
+        self.assertNotEqual(tree, self.tree)
+        self.assertEqual(tree.max_depth, self.tree.max_depth)
+        self.assertEqual(tree.uniformity_measure, self.tree.uniformity_measure)
+        self.assertEqual(tree.min_samples_split, self.tree.min_samples_split)
+        self.assertEqual(tree.n_features, self.tree.n_features)
 
 if __name__ == "__main__":
     unittest.main()
