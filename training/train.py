@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
 import os
+from training.crossval import CrossValidator
 from models.decision_tree import DecisionTree  
 
 # Load preprocessed data
@@ -18,12 +19,17 @@ def train_decision_trees():
     
     for measure in uniformity_measures:
         dt_model = DecisionTree(uniformity_measure=measure, max_depth=10, min_samples_split=2)
-        dt_model.fit(X_train, y_train)
-        
+
+        # Perform cross-validation on the model
+        cv_results = CrossValidator.cross_validate(dt_model, X_train, y_train, folds=5, random_state=42)
+        print(f"Cross-validation results for {measure}: {cv_results['mean_metrics']}")
+
+        # Save the cross-validated model
         path = f"saved_models/decision_tree_{measure}.pkl"
         with open(path, "wb") as f:
             pickle.dump(dt_model, f)
-        print(f"Decision Tree model saved to {path}")
+        print(f"Decision Tree model (cross-validated) saved to {path}")
+
 
 if __name__ == "__main__":
     train_decision_trees()
