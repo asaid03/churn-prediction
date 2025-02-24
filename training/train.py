@@ -20,16 +20,18 @@ def train_decision_trees():
     for measure in uniformity_measures:
         dt_model = DecisionTree(uniformity_measure=measure, max_depth=10, min_samples_split=2)
 
-        # Perform cross-validation on the model
+        # Perform cross-validation 
         cv_results = CrossValidator.cross_validate(dt_model, X_train, y_train, folds=5, random_state=42)
         print(f"Cross-validation results for {measure}: {cv_results['mean_metrics']}")
 
-        # Save the cross-validated model
-        path = f"saved_models/decision_tree_{measure}.pkl"
-        with open(path, "wb") as f:
+        # Retrain the final model on the full dataset 
+        dt_model.fit(X_train, y_train)
+        
+        # Save the final trained model
+        model_path = f"saved_models/decision_tree_{measure}.pkl"
+        with open(model_path, "wb") as f:
             pickle.dump(dt_model, f)
-        print(f"Decision Tree model (cross-validated) saved to {path}")
-
+        print(f"Final Decision Tree model trained on full data saved to {model_path}")
 
 if __name__ == "__main__":
     train_decision_trees()
