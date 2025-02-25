@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from evaluator.model_evaluator import ModelEvaluator
 
+
 def load_test_data():
     X_test = pd.read_csv('dataset/X_test.csv').values
     y_test = pd.read_csv('dataset/y_test.csv').values.ravel()
@@ -19,7 +20,7 @@ def main():
     # Load test data
     X_test, y_test = load_test_data()
 
-    model_perfromance = {}
+    model_performance = {}
 
     # Ensure checkpoints directory exists
     os.makedirs("checkpoints", exist_ok=True)
@@ -34,7 +35,7 @@ def main():
 
         # Calculate metrics using ModelEvaluator
         metrics = ModelEvaluator.calculate_metrics(y_test, y_pred)
-        model_perfromance[model_name] = metrics
+        model_performance[model_name] = metrics
 
         # Save perofmance metrics to a file
         metrics_path = os.path.join("checkpoints", f"{model_name}_metrics.pkl")
