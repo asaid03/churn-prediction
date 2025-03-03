@@ -89,7 +89,57 @@ class AppView:
         self.graph_canvas.draw()
         self.graph_canvas.get_tk_widget().grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
 
+    def display_performance_graph(self, data):
+        """Display a bar graph of model performance."""
+        fig, ax = plt.subplots()
+        models = list(data.keys())
+        metrics = list(next(iter(data.values())).keys())
+        bar_width = 0.35
+        for i, model in enumerate(models):
+            metric_values = [data[model][metric] for metric in metrics]
+            ax.bar([x + bar_width * i for x in range(len(metrics))], metric_values, bar_width, label=model)
+        ax.set_xlabel("Metric")
+        ax.set_ylabel("Value")
+        ax.set_title("Model Performance Comparison")
+        ax.set_xticks([x + bar_width for x in range(len(metrics))])
+        ax.set_xticklabels(metrics)
+        ax.legend()
+        self.display_graph(fig)
 
+    def display_line_graph(self, data):
+        """Display a line graph of model performance by connecting metric values."""
+        fig, ax = plt.subplots()
+        for model, metric_dict in data.items():
+            x = list(range(len(metric_dict)))
+            y = list(metric_dict.values())
+            ax.plot(x, y, marker='o', label=model)
+        if data:
+            metrics_keys = list(next(iter(data.values())).keys())
+            ax.set_xticks(list(range(len(metrics_keys))))
+            ax.set_xticklabels(metrics_keys)
+        ax.set_xlabel("Metric")
+        ax.set_ylabel("Value")
+        ax.set_title("Line Graph of Model Performance")
+        ax.legend()
+        self.display_graph(fig)
+
+    def display_exact_results(self, data):
+        """Display exact performance metrics in a formatted table."""
+        if self.graph_canvas:
+            self.graph_canvas.get_tk_widget().destroy()
+        result_frame = ctk.CTkFrame(self.panel1)
+        result_frame.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
+        row_idx = 0
+        for model, metrics in data.items():
+            model_label = ctk.CTkLabel(result_frame, text=model, font=("Arial", 12, "bold"))
+            model_label.grid(row=row_idx, column=0, padx=5, pady=5, sticky="w")
+            col_idx = 1
+            for metric, value in metrics.items():
+                metric_label = ctk.CTkLabel(result_frame, text=f"{metric}: {value}", font=("Arial", 10))
+                metric_label.grid(row=row_idx, column=col_idx, padx=5, pady=5, sticky="w")
+                col_idx += 1
+            row_idx += 1
+        self.graph_canvas = result_frame
 
     def update(self, data):
         vis_type = self.visualisation_option.get()
