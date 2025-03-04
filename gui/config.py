@@ -1,6 +1,6 @@
 import os
 
-# Base directory (auto-detect project root)
+# Base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Dataset paths
@@ -14,4 +14,5 @@ MODEL_FILES = {
     'Decision Tree (Entropy)': os.path.join(MODEL_DIR, "decision_tree_entropy.pkl"),
     'Decision Tree (Error)': os.path.join(MODEL_DIR, "decision_tree_error.pkl"),
     'Decision Tree (Gini)': os.path.join(MODEL_DIR, "decision_tree_gini.pkl"),
+    'KNN (k=34)': os.path.join(MODEL_DIR, "knn_k34_performance.pkl")  
 }
