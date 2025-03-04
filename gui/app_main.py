@@ -25,7 +25,7 @@ def main():
     view.controller = controller
 
     # Populate the model list in the view
-    view.update_model_list(list(model.models.keys()))
+    view.update_models(model.models.keys())
 
     root.mainloop()
 

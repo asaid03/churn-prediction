@@ -1,153 +1,133 @@
+import tkinter as tk
 import customtkinter as ctk
-import tkinter as tk  
-from tkinter import messagebox
-import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("green")
 
 class AppView:
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
-        self.create_panels()
-        self.create_model_selection()
-        self.create_menu_bar()
+        self.root.title("Model Analytics")
+        self.root.geometry("1000x600")
+    
+        # Configure main layout
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+        
+        self._create_sidebar()
+        self._create_viz_area()
 
-        # graphs
+    def _create_sidebar(self):
+        self.sidebar = ctk.CTkFrame(self.root, width=200, corner_radius=0)
+        self.sidebar.grid(row=0, column=0, sticky="nsew")
+        
+        # Model selection
+        ctk.CTkLabel(self.sidebar, text="Select Models:", anchor="w").pack(pady=(20,5), padx=20)
+        self.model_vars = {}
+        self.models_frame = ctk.CTkScrollableFrame(self.sidebar)
+        self.models_frame.pack(fill="both", expand=True, padx=20)
+        
+        # Visualisation type
+        self.viz_type = ctk.CTkOptionMenu(self.sidebar, values=["Bar Chart", "Line Chart", "Exact Values"])
+        self.viz_type.set("Bar Chart")
+        self.viz_type.pack(pady=10, padx=20, fill="x")
+        
+        # Compare button
+        ctk.CTkButton(self.sidebar, text="Compare", command=self._handle_compare).pack(pady=20, padx=20, fill="x")
+
+    def _create_viz_area(self):
+        """Create main visualisation canvas"""
+        self.viz_frame = ctk.CTkFrame(self.root)
+        self.viz_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
         self.graph_canvas = None
+        
 
-    def create_panels(self):
-        """Create main panels for the GUI."""
-        self.panel1 = ctk.CTkFrame(self.root)
-        self.panel1.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-        self.panel1_title = ctk.CTkLabel(self.panel1, text="Model Performance Comparison", font=("Arial", 16))
-        self.panel1_title.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="w")
-        self.panel1.rowconfigure(4, weight=1)
-
-        self.root.rowconfigure(0, weight=3)
-        self.root.rowconfigure(1, weight=1)
-        self.root.columnconfigure(0, weight=1)
-
-    def create_model_selection(self):
-        """Create model selection checkboxes, visualisation selection and compare button."""
-        self.checkbox_frame = ctk.CTkFrame(self.panel1)
-        self.checkbox_frame.grid(row=1, column=0, padx=5, pady=5, sticky="w")
-        self.model_vars = {}
-
-        vis_frame = ctk.CTkFrame(self.panel1)
-        vis_frame.grid(row=2, column=0, padx=5, pady=5, sticky="w")
-        vis_label = ctk.CTkLabel(vis_frame, text="Select Visualisation:")
-        vis_label.grid(row=0, column=0, padx=5, pady=5)
-        self.visualisation_option = ctk.CTkOptionMenu(vis_frame, values=["Bar Graph", "Line Graph", "Correlation Matrix", "Exact Results"])
-        self.visualisation_option.set("Bar Graph")
-        self.visualisation_option.grid(row=0, column=1, padx=5, pady=5)
-
-        self.compare_button = ctk.CTkButton(self.panel1, text="Compare Performance", command=self.on_compare_performance)
-        self.compare_button.grid(row=3, column=0, padx=5, pady=10, sticky="w")
-
-    def create_menu_bar(self):
-        """Create the menu bar using tkinter's Menu widget."""
-        self.menu_bar = tk.Menu(self.root)
-        self.root.config(menu=self.menu_bar)
-
-        file_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.menu_bar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="Exit", command=self.root.quit)
-
-        help_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.menu_bar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="About", command=self.show_about)
-
-    def show_about(self):
-        """Display the about dialog."""
-        messagebox.showinfo("About", "Churn Prediction GUI\nVersion 1.0")
-
-    def update_model_list(self, models):
-        """Update the checkbox list based on available models."""
-        for widget in self.checkbox_frame.winfo_children():
+    def update_models(self, models):
+        """Update model checkboxes"""
+        for widget in self.models_frame.winfo_children():
             widget.destroy()
-        self.model_vars = {}
-        for idx, model in enumerate(models):
-            var = ctk.BooleanVar()
-            chk = ctk.CTkCheckBox(self.checkbox_frame, text=model, variable=var)
-            chk.grid(row=idx, column=0, sticky="w", padx=5, pady=2)
-            self.model_vars[model] = var
+        self.model_vars = {model: ctk.BooleanVar() for model in models}
+        for model, var in self.model_vars.items():
+            ctk.CTkCheckBox(self.models_frame, text=model, variable=var).pack(anchor="w")
 
-    def on_compare_performance(self):
-        """Handle the 'Compare Performance' button click event."""
-        selected_models = [model for model, var in self.model_vars.items() if var.get()]
+    def _handle_compare(self):
+        """Handles comparison action by validating selection and triggering performance comparison."""
+        selected_models = []
+        
+        for model_name, checkbox_var in self.model_vars.items():
+            if checkbox_var.get():
+                selected_models.append(model_name)
+                
         if not selected_models:
-            messagebox.showerror("Error", "Please select at least one model.")
+            ctk.CTkMessagebox.show_error(title="Selection Needed",message="Please select at least one model before comparing.")
             return
         self.controller.compare_performance(selected_models)
 
-    def display_graph(self, fig):
-        """Display the given matplotlib figure in the GUI."""
+
+    def show_results(self, data):
+        """Display results based on selected visualisation"""
+        viz_type = self.viz_type.get()
+        viz_methods = {
+            "Bar Chart": self._show_bar_chart,
+            "Line Chart": self._show_line_chart,
+            "Exact Values": None
+        }
+        
+        viz_method = viz_methods.get(viz_type, self._show_bar_chart)
+        viz_method(data)
+
+    def _show_bar_chart(self, data):
+        """Display grouped bar chart for model performance."""
         if self.graph_canvas:
             self.graph_canvas.get_tk_widget().destroy()
-        self.graph_canvas = FigureCanvasTkAgg(fig, master=self.panel1)
-        self.graph_canvas.draw()
-        self.graph_canvas.get_tk_widget().grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
 
-    def display_performance_graph(self, data):
-        """Display a bar graph of model performance."""
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(8, 5), facecolor="#F0F0F0")
         models = list(data.keys())
         metrics = list(next(iter(data.values())).keys())
         bar_width = 0.35
+
+        # Plot each model's metrics
         for i, model in enumerate(models):
-            metric_values = [data[model][metric] for metric in metrics]
-            ax.bar([x + bar_width * i for x in range(len(metrics))], metric_values, bar_width, label=model)
-        ax.set_xlabel("Metric")
-        ax.set_ylabel("Value")
-        ax.set_title("Model Performance Comparison")
-        ax.set_xticks([x + bar_width for x in range(len(metrics))])
-        ax.set_xticklabels(metrics)
-        ax.legend()
-        self.display_graph(fig)
+            metric_values = list(data[model].values())
+            ax.bar([x + bar_width * i for x in range(len(metrics))], metric_values, bar_width, label=model, edgecolor="black", linewidth=0.7)
+            
+        # Axis labels
+        ax.set_xlabel("Metric", fontsize=12)
+        ax.set_ylabel("Value", fontsize=12)
+        ax.set_title("Model Performance Comparison", fontsize=14, pad=20)
 
-    def display_line_graph(self, data):
-        """Display a line graph of model performance by connecting metric values."""
-        fig, ax = plt.subplots()
-        for model, metric_dict in data.items():
-            x = list(range(len(metric_dict)))
-            y = list(metric_dict.values())
-            ax.plot(x, y, marker='o', label=model)
-        if data:
-            metrics_keys = list(next(iter(data.values())).keys())
-            ax.set_xticks(list(range(len(metrics_keys))))
-            ax.set_xticklabels(metrics_keys)
-        ax.set_xlabel("Metric")
-        ax.set_ylabel("Value")
-        ax.set_title("Line Graph of Model Performance")
-        ax.legend()
-        self.display_graph(fig)
+        # X-ticks and Labels
+        x_tick_positions = [x + (bar_width * (len(models) / 2)) for x in range(len(metrics))]
+        ax.set_xticks(x_tick_positions)
+        ax.set_xticklabels(metrics, rotation=45, ha="right")
+        ax.legend(loc="best")
+        ax.grid(True)
+        fig.tight_layout()
+        self._display_figure(fig)
 
-    def display_exact_results(self, data):
-        """Display exact performance metrics in a formatted table."""
+
+    def _show_line_chart(self, data):
+        """line chart visualisation"""
+        fig, ax = plt.subplots(figsize=(8, 4))
+        for model, metrics in data.items():
+            ax.plot(list(metrics.values()), marker='o', label=model)
+            
+        ax.set_xticks(range(len(metrics)))
+        ax.set_xticklabels(metrics.keys(), rotation=25)
+        ax.legend()
+        self._display_figure(fig)
+
+    def _display_figure(self, fig):
+        """Helper to display matplotlib figures"""
         if self.graph_canvas:
             self.graph_canvas.get_tk_widget().destroy()
-        result_frame = ctk.CTkFrame(self.panel1)
-        result_frame.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
-        row_idx = 0
-        for model, metrics in data.items():
-            model_label = ctk.CTkLabel(result_frame, text=model, font=("Arial", 12, "bold"))
-            model_label.grid(row=row_idx, column=0, padx=5, pady=5, sticky="w")
-            col_idx = 1
-            for metric, value in metrics.items():
-                metric_label = ctk.CTkLabel(result_frame, text=f"{metric}: {value}", font=("Arial", 10))
-                metric_label.grid(row=row_idx, column=col_idx, padx=5, pady=5, sticky="w")
-                col_idx += 1
-            row_idx += 1
-        self.graph_canvas = result_frame
-
+        self.graph_canvas = FigureCanvasTkAgg(fig, master=self.viz_frame)
+        self.graph_canvas.draw()
+        self.graph_canvas.get_tk_widget().pack(fill="both", expand=True)
+        
     def update(self, data):
-        vis_type = self.visualisation_option.get()
-        if vis_type == "Bar Graph":
-            self.display_performance_graph(data)
-        elif vis_type == "Line Graph":
-            self.display_line_graph(data)
-        elif vis_type == "Exact Results":
-            self.display_exact_results(data)
-        else:
-            self.display_performance_graph(data)
+        """Observer update method called by the model"""
+        self.show_results(data)
