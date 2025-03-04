@@ -25,18 +25,26 @@ class AppModel:
             return None, None
 
     def _load_models(self):
-        """Load pre-trained models from configured file paths."""
+        """Load pre-trained models and KNN performance from configured file paths."""
         for name, path in MODEL_FILES.items():
             try:
                 if os.path.exists(path):
                     with open(path, "rb") as f:
                         model = pickle.load(f)
-                    self.models[name] = model
-                    self.performance_data[name] = self._evaluate_model(model)
+
+                    if name == "KNN (k=34)":
+                        self.models[name] = None
+                        self.performance_data[name] = model
+                        print(f"{name} performance loaded successfully")
+                    else:
+                        self.models[name] = model
+                        self.performance_data[name] = self._evaluate_model(model)
+                        print(f"{name} model loaded successfully")
                 else:
                     print(f"Warning: Model file not found at {path}")
-            except Exception as e:
-                print(f"Error loading model '{name}': {e}")
+            except (pickle.UnpicklingError, FileNotFoundError, Exception) as e:
+                print(f"Error loading model '{name}' from {path}: {e}")
+
 
     def _evaluate_model(self, model):
         """Evaluate model on test dataset if available."""
@@ -59,5 +67,10 @@ class AppModel:
 
     def get_performance(self, selected_models):
         """Retrieve performance metrics for selected models."""
-        performance = {model: self.performance_data.get(model, {}) for model in selected_models}
+        performance = {}
+        for model in selected_models:
+            if model in self.performance_data:
+                performance[model] = self.performance_data[model]
+            else:
+                performance[model] = {}
         return performance
