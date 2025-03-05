@@ -73,7 +73,7 @@ class AppView:
         viz_methods = {
             "Bar Chart": self._show_bar_chart,
             "Line Chart": self._show_line_chart,
-            "Exact Values": None
+            "Exact Values": self._show_table
         }
         
         viz_method = viz_methods.get(viz_type, self._show_bar_chart)
@@ -119,6 +119,29 @@ class AppView:
         ax.set_xticklabels(metrics.keys(), rotation=25)
         ax.legend()
         self._display_figure(fig)
+        
+    def _show_table(self, data):
+        """Display exact values in a table format."""
+        if self.graph_canvas:
+            self.graph_canvas.get_tk_widget().destroy()
+
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.axis('tight')
+        ax.axis('off')
+
+        table_data = []
+        columns = ["Model"] + list(next(iter(data.values())).keys())
+        for model, metrics in data.items():
+            row = [model] + list(metrics.values())
+            table_data.append(row)
+
+        table = ax.table(cellText=table_data, colLabels=columns, cellLoc='center', loc='center')
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        table.scale(1.2, 1.2)
+
+        self._display_figure(fig)
+
 
     def _display_figure(self, fig):
         """Helper to display matplotlib figures"""
