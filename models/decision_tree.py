@@ -197,6 +197,17 @@ class DecisionTree:
         if x[node.feature] <= node.threshold:
             return self.traverse_tree(x, node.left)
         return self.traverse_tree(x, node.right)
+    
+    def clone(self):
+        '''
+        Creates a copy of the current model with same parameters.
+        '''
+        return DecisionTree(
+            uniformity_measure = self.uniformity_measure,
+            max_depth = self.max_depth,
+            min_samples_split = self.min_samples_split,
+            n_features = self.n_features
+        )
 
 
     def save(self, filename):

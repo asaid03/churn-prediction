@@ -1,5 +1,5 @@
 import unittest
-from Models.knn import NearestNeighbours,Conformal
+from models.knn import NearestNeighbours,Conformal
 import unittest
 import numpy as np
 

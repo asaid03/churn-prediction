@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import pickle
 import os
-from Evaluator.model_evaluator import ModelEvaluator
+from evaluator.model_evaluator import ModelEvaluator
 
 
 class TestModelEvaluator(unittest.TestCase):
