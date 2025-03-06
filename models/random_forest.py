@@ -37,13 +37,13 @@ class RandomForest:
     def _select_bootstrap_sample(self, X, y):
         n_samples = X.shape[0]
         sample_idxs = np.random.choice(n_samples, n_samples, replace=True)
-        X_sample = X.values[sample_idxs] 
-        y_sample = y.values[sample_idxs]  
+        X_sample = X[sample_idxs] 
+        y_sample = y[sample_idxs]  
         return X_sample, y_sample
 
     def _majority_vote(self, preds):
-        Counter = Counter(preds)
-        most_common_label = Counter.most_common(1)[0][0]
+        counter = Counter(preds)
+        most_common_label = counter.most_common(1)[0][0]
         return  most_common_label
     
     def predict(self, X):
