@@ -2,6 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import pandas as pd
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -68,47 +69,27 @@ class AppView:
 
 
     def show_results(self, data):
-        """Display results based on selected visualisation"""
+        """Display results with consistent layout reset."""
+        
+        # Clear out all existing widgets
+        for widget in self.viz_frame.winfo_children():
+            widget.destroy()
+        
+        self.graph_canvas = None
+        self.viz_frame.grid_rowconfigure(0, weight=1)
+        self.viz_frame.grid_columnconfigure(0, weight=1)
+
         viz_type = self.viz_type.get()
         viz_methods = {
             "Bar Chart": self._show_bar_chart,
             "Line Chart": self._show_line_chart,
             "Exact Values": self._show_table
         }
-        
+
         viz_method = viz_methods.get(viz_type, self._show_bar_chart)
         viz_method(data)
-
-    def _show_bar_chart(self, data):
-        """Display grouped bar chart for model performance."""
-        if self.graph_canvas:
-            self.graph_canvas.get_tk_widget().destroy()
-
-        fig, ax = plt.subplots(figsize=(8, 5), facecolor="#F0F0F0")
-        models = list(data.keys())
-        metrics = list(next(iter(data.values())).keys())
-        bar_width = 0.35
-
-        # Plot each model's metrics
-        for i, model in enumerate(models):
-            metric_values = list(data[model].values())
-            ax.bar([x + bar_width * i for x in range(len(metrics))], metric_values, bar_width, label=model, edgecolor="black", linewidth=0.7)
-            
-        # Axis labels
-        ax.set_xlabel("Metric", fontsize=12)
-        ax.set_ylabel("Value", fontsize=12)
-        ax.set_title("Model Performance Comparison", fontsize=14, pad=20)
-
-        # X-ticks and Labels
-        x_tick_positions = [x + (bar_width * (len(models) / 2)) for x in range(len(metrics))]
-        ax.set_xticks(x_tick_positions)
-        ax.set_xticklabels(metrics, rotation=45, ha="right")
-        ax.legend(loc="best")
-        ax.grid(True)
-        fig.tight_layout()
-        self._display_figure(fig)
-
-
+        
+        
     def _show_line_chart(self, data):
         """line chart visualisation"""
         fig, ax = plt.subplots(figsize=(8, 4))
@@ -120,27 +101,52 @@ class AppView:
         ax.legend()
         self._display_figure(fig)
         
-    def _show_table(self, data):
-        """Display exact values in a table format."""
+
+    def _show_bar_chart(self, data):
+        """Display model performance as a grouped bar chart using DataFrame."""
         if self.graph_canvas:
-            self.graph_canvas.get_tk_widget().destroy()
+            self.graph_canvas.destroy()
 
-        fig, ax = plt.subplots(figsize=(8, 4))
-        ax.axis('tight')
-        ax.axis('off')
+        #plotting
+        df = pd.DataFrame(data).T
+        fig, ax = plt.subplots(figsize=(10, 6), facecolor="white")
+        df.plot(kind="bar", ax=ax, edgecolor="black", linewidth=0.7)
 
-        table_data = []
-        columns = ["Model"] + list(next(iter(data.values())).keys())
-        for model, metrics in data.items():
-            row = [model] + list(metrics.values())
-            table_data.append(row)
+        # AXIS/LABELS
+        ax.set_xlabel("Models", fontsize=12)
+        ax.set_ylabel("Values", fontsize=12)
+        ax.set_title("Model Performance Comparison", fontsize=14, pad=20)
+        ax.legend(title="Metrics", bbox_to_anchor=(1, 1), loc="upper right")
+        ax.grid(True, linestyle="--", alpha=0.6)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
 
-        table = ax.table(cellText=table_data, colLabels=columns, cellLoc='center', loc='center')
-        table.auto_set_font_size(False)
-        table.set_fontsize(10)
-        table.scale(1.2, 1.2)
-
+        fig.tight_layout()
         self._display_figure(fig)
+
+
+
+    def _show_table(self, data):
+        """Display model performance in a scrollable table."""
+        if self.graph_canvas:
+            self.graph_canvas.destroy()  # Clear previous table
+        self.graph_canvas = ctk.CTkScrollableFrame(self.viz_frame, label_text="Performance Metrics")
+        self.graph_canvas.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Create table headers
+        headers = ["Model"] + list(data[next(iter(data))].keys())
+        for col in range(len(headers)):
+            label = ctk.CTkLabel(self.graph_canvas, text=headers[col], font=("Arial", 12, "bold"))
+            label.grid(row=0, column=col, padx=10, pady=5)
+
+        # Add table rows
+        row = 1
+        for model, metrics in data.items():
+            ctk.CTkLabel(self.graph_canvas, text=model, font=("Arial", 11)).grid(row=row, column=0, padx=10, pady=5)
+            col = 1
+            for value in metrics.values():
+                ctk.CTkLabel(self.graph_canvas, text=f"{value:.4f}", font=("Arial", 11)).grid(row=row, column=col, padx=10, pady=5)
+                col += 1
+            row += 1
 
 
     def _display_figure(self, fig):
