@@ -24,7 +24,7 @@ class RandomForest:
     def fit(self, X, y):
         self.trees = []
         for _ in range(self.n_estimators):
-            X_sample, y_sample = self._select_bootstrap_sample(X, y)
+            X_sample, y_sample = self.select_bootstrap_sample(X, y)
             tree = DecisionTree(
                 uniformity_measure=self.uniformity_measure,
                 max_depth=self.max_depth,
@@ -34,14 +34,14 @@ class RandomForest:
             tree.fit(X_sample, y_sample)
             self.trees.append(tree)
 
-    def _select_bootstrap_sample(self, X, y):
+    def select_bootstrap_sample(self, X, y):
         n_samples = X.shape[0]
         sample_idxs = np.random.choice(n_samples, n_samples, replace=True)
         X_sample = X[sample_idxs] 
         y_sample = y[sample_idxs]  
         return X_sample, y_sample
 
-    def _majority_vote(self, preds):
+    def majority_vote(self, preds):
         counter = Counter(preds)
         most_common_label = counter.most_common(1)[0][0]
         return  most_common_label
@@ -49,4 +49,14 @@ class RandomForest:
     def predict(self, X):
         tree_predictions = np.array([tree.predict(X) for tree in self.trees])
         tree_predictions = np.swapaxes(tree_predictions, 0, 1)  
-        return np.array([self._majority_vote(preds) for preds in tree_predictions])
+        return np.array([self.majority_vote(preds) for preds in tree_predictions])
+    
+    
+    def clone(self):
+        return RandomForest(
+            n_estimators=self.n_estimators,
+            max_depth=self.max_depth,
+            min_samples_split=self.min_samples_split,
+            n_features=self.n_features,
+            uniformity_measure=self.uniformity_measure
+        )
