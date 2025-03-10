@@ -31,14 +31,13 @@ class RandomForest:
         """
         self.trees = []
         for _ in range(self.n_estimators):
-            X_sample, y_sample = self.select_bootstrap_sample(X, y) # take a random sample of the data
             tree = DecisionTree(
                 uniformity_measure=self.uniformity_measure,
                 max_depth=self.max_depth,
                 min_samples_split=self.min_samples_split,
                 n_features=self.n_features
             )
-            
+            X_sample, y_sample = self.select_bootstrap_sample(X, y) # take a random sample of the data
             tree.fit(X_sample, y_sample)
             self.trees.append(tree)
 
