@@ -136,6 +136,22 @@ I have been really sick these past couple of days. It is a shame, considering I 
 Furthermore, in this timeperiod I have finished my testing of decision tree model and am currently writing up my report/presentation.
 
 
+## Date 27/01/25
+
+I have scheduled a meeting with my supervisor to discuss feedback on my interim submission. Overall, it was positive feedback on my interim submission, and it identified key issues with my report that I will fix. We also discussed moving away from working on Jupyter notebooks and into a working GUI with the models. We also discussed some possible extensions to the project, such as ensemble methods and investigating imbalance methods.
+
+## Date 04/02/25
+
+I have spent time refactoring my project directory so that it meets Pep8 compliance, as my supervisor suggested. I also spent some time deciding on what front end I would use for the GUI, in between Flask and Tkinter. I also fixed issues with the report, namely the bibliography.
+
+## Date 10/02/25 - 13/02/25
+I am working on moving all the code from the notebooks into standalone packages and folders. This meant redoing preprocessing by creating a separate script. All the separate pieces are slowly coming together, which would be vital for the GUI 
+
+## Date 19/02/25 - 24/02/25
+I am a bit behind schedule due to refactoring old code for future GUI development. Also, after refactoring, I needed to implement cross-validation on my existing models. This required some time as I was not using any libraries and had to understand the coding logic required to implement my own version. Ran into quite a few issues when moving code away from notebook namely folders and models not recognising imports which was tedious to fix.My existing models incorporate CV, but I need to utilise it more effectively. 
+
+
+
 
 
 
