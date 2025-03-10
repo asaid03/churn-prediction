@@ -148,7 +148,7 @@ I have spent time refactoring my project directory so that it meets Pep8 complia
 I am working on moving all the code from the notebooks into standalone packages and folders. This meant redoing preprocessing by creating a separate script. All the separate pieces are slowly coming together, which would be vital for the GUI 
 
 ## Date 19/02/25 - 24/02/25
-I am a bit behind schedule due to refactoring old code for future GUI development. Also, after refactoring, I needed to implement cross-validation on my existing models. This required some time as I was not using any libraries and had to understand the coding logic required to implement my own version. My existing models incorporate CV, but I need to utilise it more effectively. I mean investigating the best k-fold CV for models.
+I am a bit behind schedule due to refactoring old code for future GUI development. Also, after refactoring, I needed to implement cross-validation on my existing models. This required some time as I was not using any libraries and had to understand the coding logic required to implement my own version. Ran into quite a few issues when moving code away from notebook namely folders and models not recognising imports which was tedious to fix.My existing models incorporate CV, but I need to utilise it more effectively. 
 
 
 
