@@ -24,6 +24,14 @@ class LogisticRegression:
         y_pred = self.sigmoid(linear_pred)
         return [0 if y <= 0.5 else 1 for y in y_pred]
 
+    def compute_loss(self, X, y):
+        n_samples = X.shape[0]
+        linear_pred = np.dot(X, self.weights) + self.bias
+        predictions = self.sigmoid(linear_pred)
+        loss = 0
+        for i in range(n_samples):
+            loss += -y[i] * np.log(predictions[i] + 1e-15) - (1 - y[i]) * np.log(1 - predictions[i] + 1e-15)
+        return loss / n_samples
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
