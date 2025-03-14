@@ -17,6 +17,7 @@ class LogisticRegression:
         - eta: Learning rate (default: 0.001)
         - epochs: Number of training epochs (default: 1000)
         - lambda_reg: L2 regularisation parameter (default: 0.01)
+        - threshold: Decision threshold for binary classification (default: 0.5)
         """
         self.eta = eta
         self.epochs = epochs
