@@ -150,6 +150,16 @@ class LogisticRegression:
         print(f"Precision at Best Threshold: {best_precision:.2f}")
         print(f"Recall at Best Threshold: {best_recall:.2f}")
         print(f"F1 Score at Best Threshold: {best_f1_score:.2f}")
+        
+        
+    def clone(self):
+        """
+        Clone the model.
+
+        Returns:
+            Cloned model
+        """
+        return LogisticRegression(eta=self.eta, epochs=self.epochs, lambda_reg=self.lambda_reg,threshold=self.threshold)
 
     
     

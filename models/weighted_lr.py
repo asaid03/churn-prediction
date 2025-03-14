@@ -83,3 +83,12 @@ class WeightedLogisticRegression(LogisticRegression):
         loss = -weighted_log_loss / len(y)
         l2_penalty = (self.lambda_reg / 2) * np.sum(self.weights**2)
         return loss + l2_penalty
+    
+    def clone(self):
+        """
+        Create a copy of the model.
+
+        Returns:
+            A copy of the model
+        """
+        return WeightedLogisticRegression(self.eta, self.epochs, self.lambda_reg, self.threshold, self.class_weights)
