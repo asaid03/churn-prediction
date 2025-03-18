@@ -66,6 +66,16 @@ def min_max_scaling(X_train, X_test):
     
     return X_train, X_test
 
+
+def standard_scaling(X_train, X_test):
+    mean = np.mean(X_train, axis=0)
+    std = np.std(X_train, axis=0)
+
+    X_train = (X_train - mean) / std
+    X_test = (X_test - mean) / std
+
+    return X_train, X_test
+
 if __name__ == "__main__":
     file_path = 'dataset/Telco-Customer-Churn.csv'
     churn_data = load_data(file_path)
@@ -75,7 +85,7 @@ if __name__ == "__main__":
     y = churn_data['Churn']
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_seed=42)
-    X_train, X_test = min_max_scaling(X_train, X_test)
+    X_train, X_test = standard_scaling(X_train, X_test)
     
     # Save preprocessed data
     X_train.to_csv('dataset/X_train.csv', index=False)
