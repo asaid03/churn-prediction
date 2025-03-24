@@ -2,11 +2,35 @@ import numpy as np
 from models.knn import NearestNeighbours
 
 class TomekLinks:
+    
+    """
+    Tomek Links is an under-sampling technique that removes samples from the majority class that are close to the minority class.
+    It works by identifying pairs of samples (known as Tomek Links) that are each other's nearest neighbours and belong to different classes.
+    This helps to clean the decision boundary and doesnt create any new samples.
+    
+    """
 
     def __init__(self, k=1):
+        """
+        Initialises the Tomek Links under-sampling technique.
+        parameters:
+            - k: Number of nearest neighbours to consider when identifying Tomek Links. default is 1 and shouldnt be changed.
+        """
         self.k = k
 
     def fit_resample(self, X, y):
+        """
+        Resample the dataset using the Tomek Links under-sampling technique. It removes tomek links from the dataset using index of the samples.
+        
+        
+        parameters:
+            X: Training data
+            y: Training data labels
+
+        Returns:
+            resampled_X: Resampled training data
+            resampled_y: Resampled training data labels
+        """
         X = np.array(X)
         y = np.array(y)
         
@@ -14,7 +38,7 @@ class TomekLinks:
         majority_class = self.majority_class(y)
         remove_samples = set()
         
-        # Identify majority class samples in Tomek Links
+        # Identify majority class samples in Tomek Links so we can remove them.
         for i, j in tomek_links: 
             if y[i] == majority_class:
                 remove_samples.add(i) 
@@ -29,7 +53,17 @@ class TomekLinks:
         return X_resampled, y_resampled
 
     def get_tomek_links(self, X, y):
-
+        """
+        Find the Tomek Links in the dataset.
+        
+        parameters:
+            X: Training data
+            y: Training data labels
+        
+        Returns:
+            tomek_links: Set of Tomek Links in the dataset
+        
+        """
         tomek_links = set()
         n_samples = len(X)
 
@@ -48,6 +82,16 @@ class TomekLinks:
         return tomek_links
 
     def get_cloesest_neighbour_index(self, X,index):
+        """
+        Find the index of the nearest neighbour of a sample.
+        
+        parameters:
+            X: Training data
+            index: Index of the sample
+        returns:
+            min_index: Index of the nearest neighbour of the sample
+        
+        """
         min_dist = float('inf')
         min_index = None
         for samples in range(len(X)):
