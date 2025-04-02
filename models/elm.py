@@ -116,4 +116,17 @@ class ELM:
         
         #convert into binary_classification output i.e 0 or 1
         return (raw_output > 0.5).astype(int).ravel()
+        
+    def clone(self):
+        """
+        Creates a copy of the model
+        
+        Returns:
+            ELM: A new ELM instance with the same hyperparameters.
+        """
+        return ELM(hidden_nodes=self.hidden_nodes,
+                activation=self.activation,
+                random_state=self.random_state
+                )
+
 

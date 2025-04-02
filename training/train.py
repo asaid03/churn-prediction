@@ -4,6 +4,7 @@ import os
 from training.crossval import CrossValidator
 from models.decision_tree import DecisionTree
 from models.knn import NearestNeighbours
+from models.elm import ELM
 
 def load_data():
     X_train = pd.read_csv("dataset/X_train.csv").values
@@ -31,6 +32,7 @@ def train_knn():
         pickle.dump(performance, f)
     print(f"KNN performance saved to {performance_path}")
 
+
 def train_decision_trees():
     X_train, y_train = load_data()
     uniformity_measures = ["gini", "entropy", "error"]
@@ -53,7 +55,41 @@ def train_decision_trees():
         with open(model_path, "wb") as f:
             pickle.dump(dt_model, f)
         print(f"{model_name} saved to {model_path}")
+        
+
+def train_elm():
+    X_train,y_train = load_data()
+    os.makedirs("saved_models", exist_ok=True)
+    X_train, y_train = load_data()
+
+    configs = [
+        {"activation": "relu", "hidden_nodes": 300},
+        {"activation": "sigmoid", "hidden_nodes": 400},
+        {"activation": "tanh", "hidden_nodes": 300},
+    ]
+
+    for config in configs:
+        activation = config["activation"]
+        hidden_nodes = config["hidden_nodes"]
+        model_name = f"elm_{activation}"
+
+        if model_exists(model_name):
+            print(f"Skipping {model_name} - already trained.")
+            continue
+
+        elm = ELM(hidden_nodes=hidden_nodes, activation=activation, random_state=42)
+        cv_results = CrossValidator.cross_validate(elm, X_train, y_train, folds=5, random_state=42)
+        print(f"{model_name} CV Mean Metrics: {cv_results['mean_metrics']}")
+
+        elm.fit(X_train, y_train)
+
+        with open(f"saved_models/{model_name}.pkl", "wb") as f:
+            pickle.dump(elm, f)
+
+        with open(f"saved_models/{model_name}_cv.pkl", "wb") as f:
+            pickle.dump(cv_results, f)
 
 if __name__ == "__main__":
     train_decision_trees()
     train_knn()
+    train_elm()
