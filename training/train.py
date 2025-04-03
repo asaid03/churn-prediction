@@ -1,10 +1,15 @@
 import pandas as pd
 import pickle
 import os
+
 from training.crossval import CrossValidator
+
+from models.random_forest import RandomForest
 from models.decision_tree import DecisionTree
 from models.knn import NearestNeighbours
 from models.elm import ELM
+from models.logistic_regression import LogisticRegression
+from models.weighted_lr import WeightedLogisticRegression
 
 def load_data():
     X_train = pd.read_csv("dataset/X_train.csv").values
@@ -19,48 +24,45 @@ def train_knn():
     k = 34
     knn = NearestNeighbours(neighbours=k)
     knn.fit(X_train, y_train)
-    print(f"KNN Model with k={k} trained on full dataset")
+    print(f"KNN trained (k={k})")
 
     y_pred = knn.predict(X_train)
 
     from evaluator.model_evaluator import ModelEvaluator
     performance = ModelEvaluator.calculate_metrics(y_train, y_pred)
-    
-    # Save performance metrics
+
     performance_path = "saved_models/knn_k34_performance.pkl"
     with open(performance_path, "wb") as f:
         pickle.dump(performance, f)
-    print(f"KNN performance saved to {performance_path}")
-
+    print("KNN performance saved")
 
 def train_decision_trees():
     X_train, y_train = load_data()
     uniformity_measures = ["gini", "entropy", "error"]
-
+    
     os.makedirs("saved_models", exist_ok=True)
 
     for measure in uniformity_measures:
-        model_name = f"decision_tree_{measure}"
+        model_name = f"dt_{measure}"
         if model_exists(model_name):
-            print(f"Skipping {model_name} - already trained.")
+            print(f"Skipping {model_name}")
             continue
 
         dt_model = DecisionTree(uniformity_measure=measure, max_depth=10, min_samples_split=2)
         cv_results = CrossValidator.cross_validate(dt_model, X_train, y_train, folds=5, random_state=42)
-        print(f"Cross-validation results for {measure}: {cv_results['mean_metrics']}")
+        print(f"{model_name} CV: {cv_results['mean_metrics']}")
 
         dt_model.fit(X_train, y_train)
-        
-        model_path = f"saved_models/{model_name}.pkl"
-        with open(model_path, "wb") as f:
+
+        with open(f"saved_models/{model_name}.pkl", "wb") as f:
             pickle.dump(dt_model, f)
-        print(f"{model_name} saved to {model_path}")
-        
+        with open(f"saved_models/{model_name}_cv.pkl", "wb") as f:
+            pickle.dump(cv_results, f)
+        print(f"{model_name} saved")
 
 def train_elm():
-    X_train,y_train = load_data()
-    os.makedirs("saved_models", exist_ok=True)
     X_train, y_train = load_data()
+    os.makedirs("saved_models", exist_ok=True)
 
     configs = [
         {"activation": "relu", "hidden_nodes": 300},
@@ -74,7 +76,7 @@ def train_elm():
         model_name = f"elm_{activation}"
 
         if model_exists(model_name):
-            print(f"Skipping {model_name} - already trained.")
+            print(f"Skipping {model_name}")
             continue
 
         elm = ELM(hidden_nodes=hidden_nodes, activation=activation, random_state=42)
@@ -85,11 +87,62 @@ def train_elm():
 
         with open(f"saved_models/{model_name}.pkl", "wb") as f:
             pickle.dump(elm, f)
-
         with open(f"saved_models/{model_name}_cv.pkl", "wb") as f:
             pickle.dump(cv_results, f)
 
+def train_lr():
+    X_train, y_train = load_data()
+    os.makedirs("saved_models", exist_ok=True)
+
+    lr = LogisticRegression(eta=0.0001, epochs=1000, lambda_reg=0.01)
+    cv_results = CrossValidator.cross_validate(lr, X_train, y_train, folds=5, random_state=42)
+    print(f"lr CV: {cv_results['mean_metrics']}")
+
+    lr.fit(X_train, y_train)
+
+    with open("saved_models/lr.pkl", "wb") as f:
+        pickle.dump(lr, f)
+    with open("saved_models/lr_cv.pkl", "wb") as f:
+        pickle.dump(cv_results, f)
+    print("lr saved")
+
+def train_wlr():
+    X_train, y_train = load_data()
+    os.makedirs("saved_models", exist_ok=True)
+
+    cw = {0: 1, 1: 10}
+    wlr = WeightedLogisticRegression(eta=0.001, epochs=1000, lambda_reg=0.0, class_weights=cw)
+    cv_results = CrossValidator.cross_validate(wlr, X_train, y_train, folds=5, random_state=42)
+    print(f"wlr CV: {cv_results['mean_metrics']}")
+
+    wlr.fit(X_train, y_train)
+
+    with open("saved_models/wlr.pkl", "wb") as f:
+        pickle.dump(wlr, f)
+    with open("saved_models/wlr_cv.pkl", "wb") as f:
+        pickle.dump(cv_results, f)
+    print("wlr saved")
+
+def train_rf():
+    X_train, y_train = load_data()
+    os.makedirs("saved_models", exist_ok=True)
+
+    rf = RandomForest(n_estimators=100, max_depth=10, min_samples_split=2)
+    cv_results = CrossValidator.cross_validate(rf, X_train, y_train, folds=5, random_state=42)
+    print(f"rf CV: {cv_results['mean_metrics']}")
+
+    rf.fit(X_train, y_train)
+
+    with open("saved_models/rf.pkl", "wb") as f:
+        pickle.dump(rf, f)
+    with open("saved_models/rf_cv.pkl", "wb") as f:
+        pickle.dump(cv_results, f)
+    print("rf saved")
+
 if __name__ == "__main__":
+    train_lr()
+    train_wlr()
+    train_rf()
     train_decision_trees()
-    train_knn()
-    train_elm()
+    #train_knn()
+    #train_elm()
