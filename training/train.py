@@ -48,7 +48,7 @@ def train_decision_trees():
             print(f"Skipping {model_name}")
             continue
 
-        dt_model = DecisionTree(uniformity_measure=measure, max_depth=10, min_samples_split=2)
+        dt_model = DecisionTree(uniformity_measure=measure, max_depth=5, min_samples_split=10)
         cv_results = CrossValidator.cross_validate(dt_model, X_train, y_train, folds=5, random_state=42)
         print(f"{model_name} CV: {cv_results['mean_metrics']}")
 
@@ -140,9 +140,9 @@ def train_rf():
     print("rf saved")
 
 if __name__ == "__main__":
-    train_lr()
-    train_wlr()
-    train_rf()
+    #train_lr()
+    #train_wlr()
+    #train_rf()
     train_decision_trees()
     #train_knn()
     #train_elm()
