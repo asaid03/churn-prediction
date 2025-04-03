@@ -26,7 +26,7 @@ MODEL_FILES = {
     
     'K-Nearest Neighbours (k=34)': os.path.join(MODEL_DIR, "knn_k34_performance.pkl"),
 
-    'Extreme Learning Machine (ReLU)': os.path.join(MODEL_DIR, "elm_relu.pkl"),
-    'Extreme Learning Machine (Sigmoid)': os.path.join(MODEL_DIR, "elm_sigmoid.pkl"),
-    'Extreme Learning Machine (Tanh)': os.path.join(MODEL_DIR, "elm_tanh.pkl")
+    'ELM (ReLU)': os.path.join(MODEL_DIR, "elm_relu.pkl"),
+    'ELM (Sigmoid)': os.path.join(MODEL_DIR, "elm_sigmoid.pkl"),
+    'ELM(Tanh)': os.path.join(MODEL_DIR, "elm_tanh.pkl")
 }
