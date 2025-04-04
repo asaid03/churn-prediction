@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from gui.app_model import AppModel
+from gui.app_view import AppView
 from gui.app_controller import AppController
-from gui.pages.model_performance import PerformancePage
 import sys
 
 def main():
@@ -19,9 +19,11 @@ def main():
 
     # Initialise Model, View, Controller
     model = AppModel()
-    view = PerformancePage(root, None)
+    view = AppView(root, None)
     controller = AppController(model, view)
     view.controller = controller
+    view.performance_page.controller = controller 
+
 
     view.update_models(model.models.keys())
 
