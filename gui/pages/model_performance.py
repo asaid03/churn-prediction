@@ -19,6 +19,14 @@ class PerformancePage(ctk.CTkFrame):
         self.sidebar.pack(side="left", fill="y")
         
         
+        ctk.CTkLabel(self.sidebar, text="Performance Type:", anchor="w").pack(pady=(10, 0), padx=20)
+        
+        # OPt between test set or cross-validation
+        self.performance_type = ctk.CTkOptionMenu(self.sidebar,values=["Test Set", "Cross-Validation"])
+        self.performance_type.set("Test Set")
+        self.performance_type.pack(pady=5, padx=20, fill="x")
+
+        
         # filter optionss
         ctk.CTkLabel(self.sidebar, text="Filter:", anchor="w").pack(pady=(20, 5), padx=20)
         self.resample_filter = ctk.CTkOptionMenu(
@@ -83,7 +91,8 @@ class PerformancePage(ctk.CTkFrame):
         if not selected:
             tk.messagebox.showerror("No Models Selected", "Please select at least one model.")
             return
-        self.controller.compare_performance(selected)
+        perf_type = self.performance_type.get()
+        self.controller.compare_performance(selected, perf_type)
 
     def show_results(self, data):
         for widget in self.main_area.winfo_children():

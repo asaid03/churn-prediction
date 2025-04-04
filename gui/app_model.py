@@ -2,12 +2,13 @@ import os
 import pickle
 import pandas as pd
 from evaluator.model_evaluator import ModelEvaluator
-from gui.config import MODEL_FILES, X_TEST_PATH, Y_TEST_PATH
+from gui.config import MODEL_FILES, X_TEST_PATH, Y_TEST_PATH ,CV_FILES
 
 class AppModel:
     def __init__(self):
         self.models = {}
         self.performance_data = {}
+        self.cv_scores = {}
         self.observers = []
 
         # Load test dataset
@@ -40,6 +41,12 @@ class AppModel:
                         self.models[name] = model
                         self.performance_data[name] = self._evaluate_model(model)
                         print(f"{name} model loaded successfully")
+                        
+                    if name in CV_FILES:
+                        with open(CV_FILES[name], "rb") as f:
+                            self.cv_scores[name] = pickle.load(f)
+                            print(f"{name} CV scores loaded successfully")
+                
                 else:
                     print(f"Warning: Model file not found at {path}")
             except (pickle.UnpicklingError, FileNotFoundError, Exception) as e:
@@ -74,3 +81,10 @@ class AppModel:
             else:
                 performance[model] = {}
         return performance
+
+    def get_cv_scores(self, selected_models):
+        cv_scores = {}
+        for model in selected_models:
+            cv_scores[model] = self.cv_scores.get(model, {})
+        return cv_scores
+
