@@ -1,11 +1,10 @@
 import customtkinter as ctk
 from gui.app_model import AppModel
-from gui.app_view import AppView
 from gui.app_controller import AppController
+from gui.pages.model_performance import PerformancePage
 import sys
 
 def main():
-    # Use CTk() from customtkinter for a modern look
     root = ctk.CTk()
     root.geometry("900x700")
     root.title("Churn Prediction GUI")
@@ -20,11 +19,10 @@ def main():
 
     # Initialise Model, View, Controller
     model = AppModel()
-    view = AppView(root, None)
+    view = PerformancePage(root, None)
     controller = AppController(model, view)
     view.controller = controller
 
-    # Populate the model list in the view
     view.update_models(model.models.keys())
 
     root.mainloop()
