@@ -85,6 +85,8 @@ class AppModel:
     def get_cv_scores(self, selected_models):
         cv_scores = {}
         for model in selected_models:
-            cv_scores[model] = self.cv_scores.get(model, {})
+            result = self.cv_scores.get(model, {})
+            cv_scores[model] = result.get("mean_metrics", {})
         return cv_scores
+
 
