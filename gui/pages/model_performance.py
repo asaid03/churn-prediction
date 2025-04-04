@@ -80,9 +80,31 @@ class PerformancePage(ctk.CTkFrame):
 
         fig.tight_layout()
         self._display_figure(fig)
-
+        
     def _show_radar_chart(self, data):
-        pass  # need to do this today
+        df = pd.DataFrame(data).T
+
+        fig = plt.figure(figsize=(10, 8))
+        ax = fig.add_subplot(111, projection="polar")
+
+        labels = df.columns.tolist()
+        theta = np.arange(len(labels) + 1) / float(len(labels)) * 2 * np.pi
+
+        for model in df.index:
+            values = df.loc[model].values
+            values = np.append(values, values[0])
+
+            ax.plot(theta, values, marker="o", label=model)
+            ax.fill(theta, values, alpha=0.1)
+
+        ax.set_xticks(theta[:-1])
+        ax.set_xticklabels(labels, color="grey", size=12)
+        ax.tick_params(pad=10)
+        ax.legend(loc="best")
+        self._display_figure(fig)
+
+
+
 
     def _show_table(self, data):
         self.plot_area = ctk.CTkScrollableFrame(self.main_area, label_text="Model Metrics")
