@@ -7,7 +7,7 @@ class HomePage(ctk.CTkFrame):
 
         title = ctk.CTkLabel(
             self,
-            text="Churn Prediction Dashboard",
+            text="Churn Prediction Dashboard 🎯",
             font=ctk.CTkFont(size=32, weight="bold")
         )
         title.pack(pady=(60, 20))
@@ -50,7 +50,7 @@ class HomePage(ctk.CTkFrame):
 
         footer = ctk.CTkLabel(
             self,
-            text="Final Year Project — Churn Prediction Dashboard",
+            text="Developed by Abdulahi Said  ",
             font=ctk.CTkFont(size=12, slant="italic"),
             text_color="#AAAAAA"  # Softish gray
         )
