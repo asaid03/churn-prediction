@@ -24,7 +24,7 @@ MODEL_FILES = {
     'Weighted Logistic Regression': os.path.join(MODEL_DIR, "wlr.pkl"),
     'Random Forest': os.path.join(MODEL_DIR, "rf.pkl"),
     
-    'K-Nearest Neighbours (k=34)': os.path.join(MODEL_DIR, "knn_k34_performance.pkl"),
+    "KNN (k=34)": os.path.join(MODEL_DIR, "knn_k34_performance.pkl"),
 
     'ELM (ReLU)': os.path.join(MODEL_DIR, "elm_relu.pkl"),
     'ELM (Sigmoid)': os.path.join(MODEL_DIR, "elm_sigmoid.pkl"),
