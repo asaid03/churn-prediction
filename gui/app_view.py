@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from gui.pages.model_performance import PerformancePage
 from gui.pages.homepage import HomePage
-
+from gui.pages.settings import SettingsPage  
 
 class AppView:
     def __init__(self, root, controller):
@@ -17,7 +17,8 @@ class AppView:
         # Create tabs
         self.home_tab = self.tabview.add("Home")
         self.performance_tab = self.tabview.add("Performance")
-
+        self.settings_tab = self.tabview.add("Settings")
+        self.settings_page = SettingsPage(self.settings_tab)
     
         self.home_page = HomePage(self.home_tab)
         self.performance_page = PerformancePage(self.performance_tab, self.controller)
