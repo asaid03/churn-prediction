@@ -170,6 +170,7 @@ class PerformancePage(ctk.CTkFrame):
         self.plot_area = FigureCanvasTkAgg(fig, master=self.main_area)
         self.plot_area.draw()
         self.plot_area.get_tk_widget().pack(fill="both", expand=True)
+        self.models_frame.update_idletasks()
 
     def update(self, data):
         self.show_results(data)
