@@ -94,7 +94,12 @@ def train_lr():
     X_train, y_train = load_data()
     os.makedirs("saved_models", exist_ok=True)
 
-    lr = LogisticRegression(eta=0.0001, epochs=1000, lambda_reg=0.01)
+    lr = LogisticRegression(
+        eta=0.001,
+        epochs=5000,
+        lambda_reg=0.0,
+        threshold=0.495
+    )
     cv_results = CrossValidator.cross_validate(lr, X_train, y_train, folds=5, random_state=42)
     print(f"lr CV: {cv_results['mean_metrics']}")
 
@@ -110,8 +115,8 @@ def train_wlr():
     X_train, y_train = load_data()
     os.makedirs("saved_models", exist_ok=True)
 
-    cw = {0: 1, 1: 10}
-    wlr = WeightedLogisticRegression(eta=0.001, epochs=1000, lambda_reg=0.0, class_weights=cw)
+    cw = {0: 1, 1: 1.5}
+    wlr = WeightedLogisticRegression(eta = 0.001,epochs=5000, lambda_reg = 0.0,threshold=0.495,class_weights= cw)
     cv_results = CrossValidator.cross_validate(wlr, X_train, y_train, folds=5, random_state=42)
     print(f"wlr CV: {cv_results['mean_metrics']}")
 
@@ -140,9 +145,9 @@ def train_rf():
     print("rf saved")
 
 if __name__ == "__main__":
-    #train_lr()
-    #train_wlr()
+    train_lr()
+    train_wlr()
     #train_rf()
-    train_decision_trees()
+    #train_decision_trees()
     #train_knn()
     #train_elm()
