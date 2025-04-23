@@ -4,9 +4,20 @@ import math
 import numpy as np
 
 class NearestNeighbours:
+    """
+    My KNN Classifier implementation.
+    It uses the Euclidean distance to find the nearest neighbours and then votes for the most common label.
+    It also keeps track of the number of ties encountered during the voting process.
+    In the case of a tie, it returns the first label in the list of tied labels.
+    """
     
     def __init__(self,neighbours=1):
+        """
+        Initialises the KNN classifier with the number of neighbours to consider.
+        If the number of neighbours is less than 1, it sets it to 1.
         
+        parameters: int, number of neighbours to consider
+        """
         if neighbours < 1:
             self.n_neighbours = 1
         else:
@@ -16,18 +27,44 @@ class NearestNeighbours:
          
     
     def get_Num_Neighbours(self):
+        """
+        Returns the number of neighbours to consider.
+        """
         return self.n_neighbours
     
     def fit(self,X_train,y_train):
+        """
+
+        Parameters:
+        X_train: feature set for training
+        y_train: labels for training set
+        
+        """
         self.X_train = X_train
         self.y_train = y_train
         
     
     def euclidean_distance(self,p1,p2):
+        """
+        Calculates the Euclidean distance between two points.
+        Parameters:
+         - p1: first point (list or array-like)
+         - p2: second point (list or array-like)
+        returns: Euclidean distance (float)
+        """
         return np.sqrt(np.sum((np.array(p1) - np.array(p2)) ** 2))
     
 
     def get_nearest_neighbour(self, test_sample):
+        """
+        Finds the k nearest neighbours of a test sample in the training set.
+        It calculates the Euclidean distance between the test sample and each training sample,
+        and returns the k nearest neighbours along with their labels.
+        
+        parameters:
+            - test_sample: the sample to find the nearest neighbours for (list or array-like)
+        returns: list of tuples (distance, label) for the k nearest neighbours
+        """
         # Checks if we set K > size of sample and deals with it accordingly
         k = min(self.n_neighbours, len(self.X_train))
 
@@ -44,6 +81,13 @@ class NearestNeighbours:
 
 
     def vote_label(self,distances): #vote label by returning label with the most counts.
+        """"
+        Votes for the most common label among the k nearest neighbours.
+        If there's a tie, it returns the first label in the list of tied labels.
+        parameters:
+            - distances: list of tuples (distance, label) for the k nearest neighbours
+        returns: the most common label (int or str)
+        """
         labels = []
         for distance,label in distances:
             labels.append(label)
@@ -61,6 +105,13 @@ class NearestNeighbours:
         return unique_labels[index]
 
     def predict(self, X_test):
+        """
+        Predicts the labels for the test set using the trained model.
+        It finds the k nearest neighbours for each test sample and votes for the most common label.
+        parameters:
+            - X_test: feature set for testing (list or array-like)
+        returns: list of predicted labels for the test set
+        """
         predictions = []
 
         for i in X_test:
@@ -73,6 +124,14 @@ class NearestNeighbours:
     
     
     def score(self,predictions,y_test):
+        """
+        Calculates the error rate and number of errors in the predictions.
+        Parameters:
+            - predictions: list of predicted labels for the test set
+            - y_test: true labels for the test set
+            
+        returns: None
+        """
         error_rate = 1 -np.mean(predictions == y_test)
         num_errors = np.size(predictions) - np.count_nonzero(predictions == y_test)
         print("Error rate is: " + str(error_rate))
@@ -87,7 +146,6 @@ class NearestNeighbours:
         
 
 class Conformal(NearestNeighbours):
-    
     def __init__(self,):
         super().__init__(neighbours=1)
         self.training_set_cs = None

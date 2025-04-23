@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 
+"""
+A  preprocessesing script for  the Telco Customer Churn dataset. 
+"""
+
 def load_data(file_path):
     churn_data = pd.read_csv(file_path)
     churn_data = churn_data.drop(['customerID'], axis=1)
@@ -25,15 +29,20 @@ def preprocess_data(churn_data):
                        'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies',
                        'Contract', 'PaymentMethod']
     
-    binary_mappings = {}
     one_hot_categories = {}
     
+    fixed_binary_mappings = {
+    'Churn': {'No': 0, 'Yes': 1},
+    }
+
     # Encode binary categorical variables
     for col in binary_cols:
-        unique_values = churn_data[col].unique()
-        mapping = {unique_values[0]: 0, unique_values[1]: 1}
-        binary_mappings[col] = mapping
-        churn_data[col] = churn_data[col].map(mapping)
+        if col in fixed_binary_mappings:
+            churn_data[col] = churn_data[col].map(fixed_binary_mappings[col])
+        else:
+            unique_values = churn_data[col].unique()
+            mapping = {unique_values[0]: 0, unique_values[1]: 1}
+            churn_data[col] = churn_data[col].map(mapping)
     
     # One-hot encode non-binary categorical variables
     for col in non_binary_cols:
@@ -57,6 +66,7 @@ def train_test_split(X, y, test_size=0.2, random_seed=None):
     
     return X_train, X_test, y_train, y_test
 
+# Normalise data using Min-Max scaling or Standard scaling
 def min_max_scaling(X_train, X_test):
     min_value = X_train.min(axis=0)
     max_value = X_train.max(axis=0)

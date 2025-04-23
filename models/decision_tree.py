@@ -86,12 +86,21 @@ class DecisionTree:
     def predict(self, X):
         """
         Predict class labels for the input samples.
+        parameters:
+        - X: Input samples.
+        Returns the predicted class labels.
         """
         return np.array([self.traverse_tree(x, self.root) for x in X])
 
     def grow_tree(self, X, y,current_n_features, depth=0):
         """
         Recursively build the decision tree.
+        parameters:
+        - X: Feature values.
+        - y: Labels of the samples.
+        - current_n_features: Number of features to consider for splitting.
+        - depth: Current depth of the tree.
+        Returns the root node of the tree.
         """
         n_samples, n_feats = X.shape
         n_labels = len(np.unique(y))
@@ -122,6 +131,11 @@ class DecisionTree:
     def best_split(self, X, y, feat_idxs):
         """
         Find the best feature and threshold for splitting the data.
+        parameters:
+        - X: Feature values.
+        - y: Labels of the samples.
+        - feat_idxs: Indices of the features to consider for splitting.
+        Returns the index of the best feature and the best threshold for splitting.
         """
         best_gain = -1
         split_idx, split_threshold = None, None
@@ -142,6 +156,14 @@ class DecisionTree:
     
 
     def information_gain(self, labels, feature_values, split_threshold):
+        """
+        Calculate the information gain from a split.
+        parameters:
+        - labels: Labels of the samples.
+        - feature_values: Feature values for the current feature.
+        - split_threshold: Threshold value for splitting.
+        Returns the information gain from the split.
+        """
 
         # Impurity of the parent node before the splitting
         parent_impurity = self.impurity(labels)
@@ -165,7 +187,11 @@ class DecisionTree:
 
     def split(self, X_column, split_threshold):
         """
-        Split the dataset based on the given threshold.
+        parameters:
+        - X_column: Feature values for the current feature.
+        - split_threshold: Threshold value for splitting.
+        Returns the indices of the samples in the left and right child nodes.
+        
         """
         left_idxs = np.argwhere(X_column <= split_threshold).flatten()
         right_idxs = np.argwhere(X_column > split_threshold).flatten()
@@ -173,7 +199,9 @@ class DecisionTree:
 
     def impurity(self, y):
         """
-        Calculate node impurity based on the chosen uniformity_measure.
+       parameters:
+        - y: Labels of the samples.
+        Returns the impurity of the labels using the specified measure.
         """
         proportions = np.bincount(y) / len(y) # p(X)
 
@@ -186,11 +214,26 @@ class DecisionTree:
         
 
     def most_common_label(self, y):
+        """
+        Find the most common label in the labels array.
+        parameters:
+        - y: Labels of the samples.
+        Returns the most common label.
+        
+        """
         counter = Counter(y)
         return counter.most_common(1)[0][0] # returns the label with the most counts
     
 
     def traverse_tree(self, x, node):
+        """
+        Traverse the tree to find the predicted class for a sample.
+        parameters:
+        - x: Input sample.
+        - node: Current node in the tree.
+        Returns the predicted class label.
+        
+        """
         if node.is_leaf_node():
             return node.value
 
@@ -200,7 +243,10 @@ class DecisionTree:
     
     def clone(self):
         '''
-        Creates a copy of the current model with same parameters.
+        Create a clone of the current DecisionTree instance.
+        Used by my cross-validation class.
+        Returns:
+        - A new DecisionTree instance with the same parameters.
         '''
         return DecisionTree(
             uniformity_measure = self.uniformity_measure,

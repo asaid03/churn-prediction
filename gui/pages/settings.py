@@ -6,6 +6,7 @@ class SettingsPage(ctk.CTkFrame):
         
         self.pack(fill="both", expand=True)
 
+        # Create a title label for the settings page
         title = ctk.CTkLabel(
             self,
             text="Settings",
@@ -16,7 +17,8 @@ class SettingsPage(ctk.CTkFrame):
         theme_label = ctk.CTkLabel(self, text="Select Theme:", font=ctk.CTkFont(size=16))
         theme_label.pack(pady=(10, 5))
 
-        self.theme = ctk.CTkOptionMenu(self,
+        # User can select between Light, Dark, and System themes
+        self.theme = ctk.CTkOptionMenu(self, 
             values=["Light", "Dark","System"],
             command=ctk.set_appearance_mode
         )
@@ -26,6 +28,7 @@ class SettingsPage(ctk.CTkFrame):
         scale_label = ctk.CTkLabel(self, text="UI Scale (%):", font=ctk.CTkFont(size=16))
         scale_label.pack(pady=(10, 5))
 
+        # Slider to adjust the UI scaling
         self.scale_slider = ctk.CTkSlider(
             self,
             from_ = 80,

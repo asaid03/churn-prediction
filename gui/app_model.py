@@ -4,6 +4,10 @@ import pandas as pd
 from evaluator.model_evaluator import ModelEvaluator
 from gui.config import MODEL_FILES, X_TEST_PATH, Y_TEST_PATH ,CV_FILES
 
+"""    
+    App model loads models and cv scores  the config file.
+    It also handles the model performance evaluation and observer pattern for GUI updates. 
+"""
 class AppModel:
     def __init__(self):
         self.models = {}
@@ -33,7 +37,8 @@ class AppModel:
                     with open(path, "rb") as f:
                         model = pickle.load(f)
 
-                    if name == "KNN (k=34)":
+                    if name == "KNN (k=34)": # Special case for KNN performance
+                        # Load KNN performance data instead of the model
                         self.models[name] = None
                         self.performance_data[name] = model
                         print(f"{name} performance loaded successfully")
@@ -60,15 +65,17 @@ class AppModel:
             return ModelEvaluator.calculate_metrics(self.y_test, y_pred)
         return {"accuracy": 0, "precision": 0, "recall": 0, "f1_score": 0, "f2_score": 0}
 
-    def add_observer(self, observer):
+    def add_observer(self, observer): 
         if observer not in self.observers:
             self.observers.append(observer)
-
-    def remove_observer(self, observer):
+            
+# Unregister an observer when it no longer needs updates
+    def remove_observer(self, observer): 
         if observer in self.observers:
             self.observers.remove(observer)
 
-    def notify_observers(self, data):
+# Notify all observers when data changes
+    def notify_observers(self, data): 
         for observer in self.observers:
             observer.update(data)
 
