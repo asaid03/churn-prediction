@@ -5,6 +5,12 @@ from preprocessing.smote import Smote
 from preprocessing.tomek import TomekLinks
 
 
+"""
+A script to apply SMOTE and Tomek Links resampling techniques to the training data.
+It would save the resampled data in separate folders for each technique.
+"""
+
+
 base_dir = "dataset"
 subfolders = {
     "smote": os.path.join(base_dir, "smote_resample"),

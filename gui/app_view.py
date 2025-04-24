@@ -1,6 +1,19 @@
 import customtkinter as ctk
 from gui.pages.model_performance import PerformancePage
 from gui.pages.homepage import HomePage
+from gui.pages.settings import SettingsPage  
+
+
+"""
+This file defines the layout and components of the GUI
+Uses custumtkinter.
+
+Includes pages for:
+- Home
+- Model performance comparison
+- Settings
+Each section has a tab view button.
+"""
 
 
 class AppView:
@@ -14,10 +27,11 @@ class AppView:
         self.tabview = ctk.CTkTabview(self.root)
         self.tabview.pack(fill="both", expand=True, padx=20, pady=20)
 
-        # Create tabs
+        # Create tabs for each page
         self.home_tab = self.tabview.add("Home")
         self.performance_tab = self.tabview.add("Performance")
-
+        self.settings_tab = self.tabview.add("Settings")
+        self.settings_page = SettingsPage(self.settings_tab)
     
         self.home_page = HomePage(self.home_tab)
         self.performance_page = PerformancePage(self.performance_tab, self.controller)

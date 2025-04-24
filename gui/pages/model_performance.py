@@ -37,26 +37,28 @@ class PerformancePage(ctk.CTkFrame):
         self.resample_filter.set("All")
         self.resample_filter.pack(pady=5, padx=20, fill="x")
 
-        
+        # Model selection checkboxes
         ctk.CTkLabel(self.sidebar, text="Select Models:", anchor="w").pack(pady=(20, 5), padx=20)
         self.model_vars = {}
         self.models_frame = ctk.CTkScrollableFrame(self.sidebar)
         self.models_frame.pack(fill="both", expand=True, padx=20)
 
+        ## Visualisation options
         ctk.CTkLabel(self.sidebar, text="View Type", anchor="w").pack(pady=(10, 0), padx=20)
         self.viz_type = ctk.CTkOptionMenu(self.sidebar, values=["Bar Chart", "Radar Chart", "Exact Values"])
         self.viz_type.set("Bar Chart")
         self.viz_type.pack(pady=5, padx=20, fill="x")
 
+        # Compare button
         self.compare_button = ctk.CTkButton(self.sidebar, text="Compare", command=self._compare_models)
         self.compare_button.pack(pady=20, padx=20, fill="x")
 
-    def _create_visual_panel(self):
+    def _create_visual_panel(self): # create the main area for visualisation
         self.main_area = ctk.CTkFrame(self)
         self.main_area.pack(side="left", expand=True, fill="both", padx=20, pady=20)
         self.plot_area = None
 
-    def update_models(self, models):
+    def update_models(self, models): # update the model list in the sidebar
         self.all_models = models  # all models
         self._filter_and_display_models()  #filtering
         
@@ -71,11 +73,11 @@ class PerformancePage(ctk.CTkFrame):
         self.model_vars = {}
         resample = self.resample_filter.get()
 
-        for model in self.all_models:
+        for model in self.all_models: # filter models based on resample type
             if resample == "All":
                 pass_filter = True
             elif resample == "Original":
-                pass_filter = "[" not in model
+                pass_filter = "[" not in model # [ is used to denote resampling methods
             else:
                 pass_filter = f"[{resample}]" in model
 
@@ -86,21 +88,21 @@ class PerformancePage(ctk.CTkFrame):
                 self.model_vars[model] = var
 
 
-    def _compare_models(self):
+    def _compare_models(self): 
         selected = [name for name, var in self.model_vars.items() if var.get()]
         if not selected:
             tk.messagebox.showerror("No Models Selected", "Please select at least one model.")
             return
-        perf_type = self.performance_type.get()
+        perf_type = self.performance_type.get() # get the performance type (test set or cross-validation)
         self.controller.compare_performance(selected, perf_type)
 
     def show_results(self, data):
-        for widget in self.main_area.winfo_children():
+        for widget in self.main_area.winfo_children(): # clear previous results
             widget.destroy()
 
         self.plot_area = None
-        viz_choice = self.viz_type.get()
-        if viz_choice == "Bar Chart":
+        viz_choice = self.viz_type.get() # get the visualisation type
+        if viz_choice == "Bar Chart": 
             self._show_bar_chart(data)
         elif viz_choice == "Radar Chart":
             self._show_radar_chart(data)
@@ -131,7 +133,7 @@ class PerformancePage(ctk.CTkFrame):
         ax = fig.add_subplot(111, projection="polar")
 
         labels = df.columns.tolist()
-        theta = np.arange(len(labels) + 1) / float(len(labels)) * 2 * np.pi
+        theta = np.arange(len(labels) + 1) / float(len(labels)) * 2 * np.pi # angles for radar chart
 
         for model in df.index:
             values = df.loc[model].values
@@ -161,7 +163,7 @@ class PerformancePage(ctk.CTkFrame):
                 ctk.CTkLabel(self.plot_area, text=f"{val:.4f}").grid(row=row, column=col, padx=10, pady=5)
 
     def _display_figure(self, fig):
-        if self.plot_area:
+        if self.plot_area: # clear previous plot if it exists
             try:
                 self.plot_area.get_tk_widget().destroy()
             except AttributeError:
@@ -170,6 +172,7 @@ class PerformancePage(ctk.CTkFrame):
         self.plot_area = FigureCanvasTkAgg(fig, master=self.main_area)
         self.plot_area.draw()
         self.plot_area.get_tk_widget().pack(fill="both", expand=True)
+        self.models_frame.update_idletasks()
 
     def update(self, data):
         self.show_results(data)

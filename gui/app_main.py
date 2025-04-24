@@ -4,6 +4,17 @@ from gui.app_view import AppView
 from gui.app_controller import AppController
 import sys
 
+
+"""
+Main  GUI file that runs.
+
+Initialises the Tkinter root window and loads the application view.
+Handles the setup and window configuration.
+
+"""
+
+
+# Start the main application loop
 def main():
     root = ctk.CTk()
     root.geometry("900x700")

@@ -119,7 +119,7 @@ class ELM:
         
     def clone(self):
         """
-        Creates a copy of the model
+        Creates a copy of the model for cross-validation.
         
         Returns:
             ELM: A new ELM instance with the same hyperparameters.

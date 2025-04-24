@@ -1,32 +1,103 @@
 # Customer Churn Prediction: A Comparative Analysis of ML algorithms
+Comparative analysis of ML models on a custumer churn dataset.
 
-This project aims to predict customer churn using machine learning models implemented from scratch, including K-Nearest Neighbours (KNN) and Decision Trees. 
-It also includes comprehensive exploratory data analysis (EDA) and an evaluation class to evaluate models performance.
+Models implemented and compared include:
+- K-Nearest Neighbours (KNN)
+- Decision Trees (DT)
+- Random Forests (RF)
+- Logistic Regression (LR)
+- Weighted Logistic Regression (WLR)
+- Extreme Learning Machine (ELM)
 
-### **1. Checkpoints**
-These contains key checkpoint files for the main jupyter notebook that runs and compares the different models. It essentialy saves time and prevents retraining models
+Resampling techniques:
+- SMOTE (Synthetic Minority Oversampling Technique)
+- Tomek Links
 
-### **2. Dataset**
-A copy of the churn dataset downloaded from https://www.kaggle.com/datasets/blastchar/telco-customer-churn.
+---
 
-### **3. Documents**
-Contains relvant documents to project and is where the REPORT is located.
 
-### **4. Jupyter Notebooks**
-- **`churn_prediction_modeling.ipynb`**: Notebook for implementing and comparing machine learning models for churn prediction.
-- **`Telecom_Churn_EDA.ipynb`**: Exploratory data analysis on the churn dataset, including visualisations and insights.
-- **`small_dataset_test.ipynb`**: Testing machine learning models on smaller, benchmarked datasets.
+### **1. Dataset**
+A copy of the churn dataset was downloaded from:  
+https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+
+### **2. Documents**
+Contains relevant project documents, including the FINAL REPORT.
+
+### **3. Jupyter Notebooks**
+Used for tuning and experimenting on developed models before integrating into the GUI.
+
+### **3. Models **
+This folder contain my implemented ML models from scratch.
+
+---
 
 ## **How to Run the Project**
-The outputs of all cells in the main notebooks (churn_prediction_modeling.ipynb and Telecom_Churn_EDA.ipynb) are already shown. 
-Running them is not necessary unless you want to retrain models or reproduce results.
-If needed, run all the cells in chronological order to avoid errors.
 
-To run the unit tests make sure you are in the general directory of the project and use these commands in the CLI:
-- python -m unittest  .\tests\test_knn.py
-- python -m unittest  .\tests\test_decision_tree.py
-- python -m unittest  .\tests\test_model_evaluator.py
+### Step 1: Create the virtual environment
 
+```bash
+python -m venv venv
+```
+
+### Step 2: Activate the environment
+
+**macOS/Linux:**
+```bash
+source venv/bin/activate
+```
+
+**Windows:**
+```bash
+venv\Scripts\activate
+```
+
+### Step 3: Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install all the necessary libraries required for:
+- Running the GUI
+- Loading and evaluating models
+- Visualising performance metrics
+- Scripts for class imbalance
+
+### Step 4: Launch the GUI
+- Ensure you are in the root direcotry of the project 
+
+```bash
+python -m gui.app_main
+```
+
+This interactive GUI allows you to:
+- Compare multiple machine learning models
+- View Test set scores
+- View Cross-Validation scores
+
+
+### Step 6: Run Unit Tests
+To run test ensure you are in the root directory of the project
+
+Then to run individual test files:
+
+```bash
+python -m unittest tests/test_knn.py
+python -m unittest tests/test_decision_tree.py
+python -m unittest tests/test_model_evaluator.py
+python -m unittest tests/test_lr.py
+python -m unittest tests/test_weighted_lr.py
+python -m unittest tests/test_elm.py
+python -m unittest tests/test_random_forest.py
+python -m unittest tests/test_resampling.py
+python -m unittest tests/test_cross_val.py
+```
+
+Or run all tests at once:
+
+```bash
+python -m unittest discover -s tests
+```
 
 
 

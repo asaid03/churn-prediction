@@ -1,3 +1,8 @@
+'''
+This contains the configuration for the GUI application.
+It includes the paths to the dataset, model files, and other resources needed for the application.
+'''
+
 import os
 
 # Base directory

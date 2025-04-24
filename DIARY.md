@@ -148,8 +148,49 @@ I have spent time refactoring my project directory so that it meets Pep8 complia
 I am working on moving all the code from the notebooks into standalone packages and folders. This meant redoing preprocessing by creating a separate script. All the separate pieces are slowly coming together, which would be vital for the GUI 
 
 ## Date 19/02/25 - 24/02/25
-I am a bit behind schedule due to refactoring old code for future GUI development. Also, after refactoring, I needed to implement cross-validation on my existing models. This required some time as I was not using any libraries and had to understand the coding logic required to implement my own version. Ran into quite a few issues when moving code away from notebook namely folders and models not recognising imports which was tedious to fix.My existing models incorporate CV, but I need to utilise it more effectively. 
+I am a bit behind schedule due to refactoring old code for future GUI development. Also, after refactoring, I needed to implement cross-validation on my existing models. This required some time as my custum models didnt work with sklearn methods. Needed to understand the coding logic required to implement my own version. Ran into quite a few issues when moving code away from notebook namely folders and models not recognising imports which was tedious to fix.My existing models incorporate CV, but I need to utilise it more effectively. 
 
+## Date 26/02/25 
+
+I have finsihed setting up for my gui development and now started working on a gui. My mine idea is a dashboard where users can select different models and different visualisation options. Also, I have been researching Software engineering and design patterns for gui development. I have selcted tkinter as my gui design  langauage as its much easier to integrate with my exsitng models and dataset. Learnt about observer and MVC design patters which makes development and structure much cleaner and reduces compelixty/coupling alot.
+
+## 27/02/25 - 03/03/25
+So I have finally implemented an early working version of my gui. Its a very early version, so far it allows user to select 2 different models KNN and DT models. Once user selcted models they are able to visually see test results i.e by selecting bar chart. Had some difficulties managing to form the pipeline of models to training and then loading for gui. Managed to implement MVC pattern and observer pattern into the gui. I need to fix the hardcoded filepaths and also improve gui layout and design
+
+
+## 04/03/25 - 05/06/25
+I managed to improve the pipeline for the GUI integration, doing this through dedicated scripts for training and loading. Now, the backend side of the GUI is fully working as it should. I also managed to remove hardcoded file paths and replace them with config files. I began working on my random forest implementation and built upon it using my DT class.
+
+
+## 06/03/25 - 10/06/25
+I implemented my random forest model and verified its effectiveness by comparing it with Sklearns on a small dataset. I need to make some minor tweaks for it to be integrated correctly with my GUI.
+
+
+## 11/03/25 - 14/06/25
+
+I have been researching and understanding how Logistic regression works. I focused on the key functionalities needed to implement it. The core functionalities are working, and my results are not too bad. I added L2 reg to further improve my results, but it didn't make too much of a difference.
+
+## 16/03/25 - 18/03/25
+
+I  had a meeting with my supervisor last week; my progress is not bad, gave me some good advice on how I can structure my report and what further models I should investigate.
+So far, I have been working on a weighted version of logistic regression and Extreme learning machines suggested by my supervisor.
+
+## 18/03/25 - 20/03/25
+
+I have been re-looking at research papers on resampling for imbalanced datasets that i have saved. The two main ones I focused on are SMOTE and TOMEK links. I have implemented SMOTE and aim to implement Tomek links as well. So far, I have seen some promising results with SMOTE; noticeably, my recall scores have increased, which is essential given the context of my problem.
+
+## 20/03/25 - 02/04/25
+I have managed to complete my imbalance resampling scripts and methods. These were Tomek links and SMOTE; they were fully tested and, thinking about the GUI developments, have created relevant scripts to separate original and resampled datasets. I have begun planning out my final report, and the next stage of development is ELM and further gui  work.
+
+## 03/04/25- 04/04/25
+I have made a lot of progress and am nearing the end goal for the coding side of my project. I have created candidate release branches. Taking the advice from my supervisor, I have implemented the Extreme Learning machine model and integrated it into the GUI. I have been working on the GUI a lot and have carried out some hyperparameter tuning.
+
+## 06/04/25
+
+My coding side is nearly complete, the GUI is fully working, and I have added a new release branch. I have had quite a bad headache but have been managing to power through. I have also been working on the report simultaneously and am a bit behind, but it should be manageable.
+
+## 07/04/25
+I managed to get an extension/late waiver and have informed my supervisor; this gives me some leeway to recover from my illness and ensure I achieve my goals for my final-year project. My code base is in good condition; I just need to finish up my report writing.
 
 
 

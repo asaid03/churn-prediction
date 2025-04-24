@@ -34,8 +34,6 @@ class HomePage(ctk.CTkFrame):
             "2) Settings:\n"
             "   - You can customize UI theme (Dark, Light, or System).\n"
             "   - You can adjust UI scale.\n\n"
-            "3) Custom Predictions:\n"
-            "   - Input your own data and get a churn prediction result."
         )
 
         instructions = ctk.CTkLabel(
