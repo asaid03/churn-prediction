@@ -1,3 +1,10 @@
+"""
+This script trains various models on the original dataset without resampling.
+Utilizes the CrossValidator class for cross-validation.
+It includes Decision Trees, ELM, Logistic Regression, Weighted Logistic Regression, Random Forest and KNN.
+It saves the trained models and their cross-validation results to saved_models.
+"""
+
 import pandas as pd
 import pickle
 import os

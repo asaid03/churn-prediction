@@ -1,3 +1,11 @@
+"""
+This script trains various models on the TOMEK-resampled dataset.
+It includes Decision Trees, ELM, Logistic Regression, Weighted Logistic Regression, and Random Forest.
+It saves the trained models and their cross-validation results to saved_models/tomek.
+"""
+
+
+
 import pandas as pd
 import pickle
 import os

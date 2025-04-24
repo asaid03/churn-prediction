@@ -6,6 +6,15 @@ A  preprocessesing script for  the Telco Customer Churn dataset.
 """
 
 def load_data(file_path):
+    """
+    Load the dataset from a CSV file and remove the 'customerID' column.
+    Replace empty strings in 'TotalCharges' with NaN and convert to float.
+    
+    parameters:
+     - file_path: str, path to the CSV file.
+    returns: preprocessed DataFrame.
+    """
+    
     churn_data = pd.read_csv(file_path)
     churn_data = churn_data.drop(['customerID'], axis=1)
     

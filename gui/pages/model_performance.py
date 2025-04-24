@@ -77,7 +77,7 @@ class PerformancePage(ctk.CTkFrame):
             if resample == "All":
                 pass_filter = True
             elif resample == "Original":
-                pass_filter = "[" not in model
+                pass_filter = "[" not in model # [ is used to denote resampling methods
             else:
                 pass_filter = f"[{resample}]" in model
 
@@ -101,8 +101,8 @@ class PerformancePage(ctk.CTkFrame):
             widget.destroy()
 
         self.plot_area = None
-        viz_choice = self.viz_type.get()
-        if viz_choice == "Bar Chart":
+        viz_choice = self.viz_type.get() # get the visualisation type
+        if viz_choice == "Bar Chart": 
             self._show_bar_chart(data)
         elif viz_choice == "Radar Chart":
             self._show_radar_chart(data)

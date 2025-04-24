@@ -1,3 +1,10 @@
+"""
+This script trains various models on the SMOTE-resampled dataset.
+Utilies the CrossValidator class for cross-validation.
+It includes Decision Trees, ELM, Logistic Regression, Weighted Logistic Regression, and Random Forest.
+It saves the trained models and their cross-validation results to saved_models/smote.
+"""
+
 import pandas as pd
 import pickle
 import os
@@ -9,6 +16,8 @@ from models.decision_tree import DecisionTree
 from models.elm import ELM
 from models.logistic_regression import LogisticRegression
 from models.weighted_lr import WeightedLogisticRegression
+
+
 
 MODEL_DIR = "saved_models/smote"
 
