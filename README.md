@@ -1,7 +1,7 @@
 # Customer Churn Prediction: A Comparative Analysis of ML algorithms
-Comparative analysis of ML models on a custumer churn dataset.
+Comparative analysis of ML models on a customer churn dataset.
 
-Models implemented and compared include:
+Models implemented from scratch and compared include:
 - K-Nearest Neighbours (KNN)
 - Decision Trees (DT)
 - Random Forests (RF)
@@ -9,7 +9,7 @@ Models implemented and compared include:
 - Weighted Logistic Regression (WLR)
 - Extreme Learning Machine (ELM)
 
-Resampling techniques:
+Resampling techniques implemented from scratch:
 - SMOTE (Synthetic Minority Oversampling Technique)
 - Tomek Links
 
@@ -22,10 +22,10 @@ https://www.kaggle.com/datasets/blastchar/telco-customer-churn
 
 
 ### **2.notebook**
-Used for tuning and experimenting on developed models before integrating into the GUI.
+Used for tuning and experimenting on developed models before integrating them into the GUI.
 
 ### **3.models**
-This folder contain my implemented ML models from scratch.
+This folder contains my implemented ML models from scratch.
 
 ---
 
@@ -75,9 +75,9 @@ This interactive GUI allows you to:
 
 
 ### Step 6: Run Unit Tests
-To run test ensure you are in the root directory of the project
+To run the test, ensure you are in the root directory of the project
 
-Then to run individual test files:
+Then, to run individual test files:
 
 ```bash
 python -m unittest tests/test_knn.py
