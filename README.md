@@ -20,13 +20,11 @@ Resampling techniques:
 A copy of the churn dataset was downloaded from:  
 https://www.kaggle.com/datasets/blastchar/telco-customer-churn
 
-### **2. Documents**
-Contains relevant project documents, including the FINAL REPORT.
 
-### **3. Jupyter Notebooks**
+### **2.notebook**
 Used for tuning and experimenting on developed models before integrating into the GUI.
 
-### **3. Models **
+### **3.models**
 This folder contain my implemented ML models from scratch.
 
 ---
